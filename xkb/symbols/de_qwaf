@@ -1,0 +1,13 @@
+partial alphanumeric_keys
+xkb_symbols "qwaf" {
+    include "us_qwaf(qwaf)"
+    key <AD01> { [ y, Y ] };
+    key <AD06> { [ z, Z ] };
+    key <AB01> { [ q, Q ] };
+};
+
+partial alphanumeric_keys
+xkb_symbols "qwaf_hjkl" {
+    include "us_hjkl(qwerty_hjkl)"
+    include "de_qwaf(qwaf)"
+};
