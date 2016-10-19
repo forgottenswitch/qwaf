@@ -1,3 +1,11 @@
+// (Mostly) phonetic cyrillic QWAF.
+//
+// The rarest letters are moved to lv3, in order
+// to have identical non-letters with latin variant.
+//
+// This layout is tested to be a way more ergonomic
+// than the standard JCUKEN.
+//
 partial alphanumeric_keys
 xkb_symbols "lv1" {
 
@@ -44,6 +52,9 @@ xkb_symbols "lv3" {
 
 };
 
+// Supposed all-in-one cyrillic international layout.
+// Not tested, for conflicts with qwaf(lv3) in particular.
+//
 partial alphanumeric_keys
 xkb_symbols "lv3_intl" {
 
@@ -78,6 +89,9 @@ xkb_symbols "lv3_intl" {
 
 };
 
+// Supposed as what-languages-remain all-in-one cyrillic international layout.
+// Not tested.
+//
 partial alphanumeric_keys modifier_keys
 xkb_symbols "lv3_srp" {
 
@@ -103,6 +117,9 @@ xkb_symbols "lv3_srp" {
 };
 
 
+// Supposed as a cyrillic phonetic layout for Dvorak user.
+// Not tested, but intended to have better ergonomics than standard JCUKEN.
+//
 partial alphanumeric_keys
 xkb_symbols "lv1_dvorak" {
 
@@ -140,8 +157,6 @@ xkb_symbols "lv1_dvorak" {
 
 partial alphanumeric_keys
 xkb_symbols "lv3_dvorak" {
-    // missing: dead_divaeresis, dead_breve, dead_macron, Ukrainian_i,ie,ghe_with_upturn
-
     key <AD04>   { [ NoSymbol, NoSymbol, Cyrillic_ef, Cyrillic_EF ] };
     key <AD10>   { [ NoSymbol, NoSymbol, Cyrillic_shcha, Cyrillic_SHCHA ] };
 
