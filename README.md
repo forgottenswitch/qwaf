@@ -5,7 +5,8 @@ Qwerty-like keyboard layout.
 Currently for Xorg (XKB) only.
 Comes with a (phonetic) cyrillic variant.
 
-Has an `hjkl` variant, which makes `,` a prefix, and `;` a modifier.
+Has an `hjkl` "module", which makes `,` a prefix, `;` a modifier,
+`,m` a layout switcher, and `,n` a Compose key.
 
 Running
 -------
@@ -30,6 +31,11 @@ Implementation notes
 --------------------
 As the `xkbcomp` cannot distinguish between system and non-system includes,
 all files under `xkb/` need to have "odd"/unique names.
+
+Usability notes
+---------------
+Qwaf is intended to be ergonomic and intuitive for a QWERTYist.
+Dvorak and international variants need testing, through.
 
 License
 -------
