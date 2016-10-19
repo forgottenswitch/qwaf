@@ -1,6 +1,7 @@
 default partial alphanumeric_keys modifier_keys
 xkb_symbols "shift" {
-    include "hjkl(base)"
+    include "hjkl(lv_1_3_5)"
+    include "hjkl(redirs)"
     include "level3_hjkl(comma_latch)"
     include "level5_hjkl(semic_shift)"
     include "level5_hjkl(ralt_lock)"
@@ -8,14 +9,15 @@ xkb_symbols "shift" {
 
 partial alphanumeric_keys modifier_keys
 xkb_symbols "lock" {
-    include "hjkl(base)"
+    include "hjkl(lv_1_3_5)"
+    include "hjkl(redirs)"
     include "level3_hjkl(comma_latch)"
     include "level5_hjkl(semic_lock)"
     include "level5_hjkl(ralt_lock)"
 };
 
 partial alphanumeric_keys modifier_keys
-xkb_symbols "base" {
+xkb_symbols "lv_1_3_5" {
     include "hjkl(lv1)"
     include "hjkl(lv3)"
     include "hjkl(lv5)"
@@ -170,6 +172,11 @@ xkb_symbols "latching_shifts" {
     key <LFSH> { [ ISO_Level2_Latch, ISO_Level2_Latch ] };
 };
 
+
+// "lv5" implemented with RedirectKey.
+// Requires "hjkl" in the xkb_compat.
+// Fixes Shift+Cursor Keys selection not working in MonoDevelop.
+// Does not work with Xserver 1.18.1 - 1.18.4
 partial modifier_keys
 xkb_symbols "redirs" {
     key <AC06> { [ NoSymbol, NoSymbol,  NoSymbol, NoSymbol,  ISO_Fast_Cursor_Left, ISO_Fast_Cursor_Left ] };

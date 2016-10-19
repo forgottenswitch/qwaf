@@ -37,6 +37,11 @@ Usability notes
 Qwaf is intended to be ergonomic and intuitive for a QWERTYist.
 Dvorak and international variants need testing, through.
 
+Bugs
+----
+`hjkl(redirs)` cannot work under Xserver 1.18.1 - 1.18.4.
+If you are assembling your own `.xkb` file, check the output of `X -version`.
+
 License
 -------
 MIT license.

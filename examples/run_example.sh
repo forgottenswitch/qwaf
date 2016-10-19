@@ -67,14 +67,30 @@ if test -z "$nth_src" ; then
   exit 1
 fi
 
-echo_and_run() {
-  echo "$@"
-  "$@"
-}
+xserver_handles_redirs=y
+if X -version 2>&1 | grep -q "1.18.[1234]" ; then
+  xserver_handles_redirs=n
+fi
 
 temp_xkb=$(mktemp)
 cp "${thisdir}/qwaf_hjkl.xkb" "$temp_xkb"
 sed -i -e "s/hjkl(qwaf)+ctrl(nocaps)/$nth_src/" "$temp_xkb"
+
+# For Xorg 1.18.1 - 1.18.4, add "+hjkl(lv5)" to xkb_symbols
+if test _"$xserver_handles_redirs" != _y ; then
+  hjkl_tail="+hjkl(lv5)"
+  for lv in 2 3 4; do
+    if grep -q "xkb_symbols.*:$lv" "$temp_xkb" ; then
+      hjkl_tail="${hjkl_tail}+hjkl(lv5):$lv"
+    fi
+  done
+  sed -i -e 's/\(.*xkb_symbols.*\)\(\"[^"]*$\)/\1+hjkl(redirs)'"$hjkl_tail"'\2/' "$temp_xkb"
+fi
+
+echo_and_run() {
+  echo "$@"
+  "$@"
+}
 
 echo
 echo "$temp_xkb:"
