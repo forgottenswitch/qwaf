@@ -7,3 +7,42 @@ hjkl(qwerty)+ctrl(nocaps)
 // QWAF with HJKL
 // ";" locks, Space unlocks
 hjkl(qwaf)+ctrl(nocaps)+level5_hjkl(semic_lock)+level5_hjkl(space_unlock)
+
+// QWAF with HJKL
+// ";" locks and unlocks
+hjkl(qwaf)+ctrl(nocaps)+level5_hjkl(semic_lock)+level5_hjkl(space_unlock)
+
+// Deutch (qwertz) QWAF
+hjkl(de)+ctrl(nocaps)
+
+// French (azerty-like) QWAF
+hjkl(fr)+ctrl(nocaps)
+
+// Russian QWAF
+// ",m" to change layouts
+hjkl(qwaf)+ctrl(nocaps)+ru_qwaf(hjkl):2+ctrl(nocaps):2
+
+// International Cyrillic QWAF
+// ",m" to change layouts
+// Prototypical only, not tested.
+hjkl(qwaf)+ctrl(nocaps)+ru_qwaf(hjkl_intl):2+ctrl(nocaps):2
+
+// Serbian Cyrillic QWAF
+// ",m" to change layouts
+// Prototypical only, not tested.
+hjkl(qwaf)+ctrl(nocaps)+ru_qwaf(hjkl_srp):2+ctrl(nocaps):2
+
+// Dvorak HJKL
+qwaf(dvorak)+hjkl+ctrl(nocaps)
+
+// Colemak HJKL
+qwaf(colemak)+hjkl+ctrl(nocaps)
+
+// Workman HJKL
+qwaf(workman)+hjkl+ctrl(nocaps)
+
+// Dvorak Russian HJKL
+// ",m" to change layouts
+// Not tested much.
+hjkl(qwaf)+ctrl(nocaps)+ru_qwaf(hjkl_dvorak):2+ctrl(nocaps):2
+

@@ -196,20 +196,20 @@ xkb_symbols "redirs" {
 
 partial alphanumeric_keys
 xkb_symbols "de" {
-    include "hjkl(qwerty)"
     include "qwaf(de)"
+    include "hjkl"
 };
 
 partial alphanumeric_keys
 xkb_symbols "fr" {
-    include "hjkl(qwerty)"
     include "qwaf(fr)"
+    include "hjkl"
 };
 
 partial alphanumeric_keys
 xkb_symbols "qwerty" {
     include "us"
-    include "hjkl(shift)"
+    include "hjkl"
 };
 
 partial alphanumeric_keys
