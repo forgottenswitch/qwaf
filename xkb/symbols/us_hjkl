@@ -1,5 +1,0 @@
-default partial alphanumeric_keys
-xkb_symbols "qwerty_hjkl" {
-    include "us"
-    include "hjkl"
-};

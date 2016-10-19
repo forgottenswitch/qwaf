@@ -1,5 +1,5 @@
-partial alphanumeric_keys
-xkb_symbols "qwaf" {
+default partial alphanumeric_keys
+xkb_symbols "us" {
 
     key <TLDE> { [ grave, asciitilde ] };
     key <AE01> { [ 1, exclam ] };
@@ -56,7 +56,23 @@ xkb_symbols "qwaf" {
 };
 
 partial alphanumeric_keys
-xkb_symbols "qwaf_dvorak" {
+xkb_symbols "de" {
+    include "qwaf(us)"
+    key <AD01> { [ y, Y ] };
+    key <AD06> { [ z, Z ] };
+    key <AB01> { [ q, Q ] };
+};
+
+partial alphanumeric_keys
+xkb_symbols "fr" {
+    include "qwaf(us)"
+    key <AD01> { [ w, W ] };
+    key <AD02> { [ v, V ] };
+    key <AC01> { [ q, Q ] };
+};
+
+partial alphanumeric_keys
+xkb_symbols "dvorak" {
     include "us"
 
     key <AE11> { [ bracketleft,  braceleft ] };
@@ -101,7 +117,7 @@ xkb_symbols "qwaf_dvorak" {
 };
 
 partial alphanumeric_keys
-xkb_symbols "qwaf_colemak" {
+xkb_symbols "colemak" {
     include "us(colemak)"
 
     key <AD08> { [ o, O, oacute, Oacute ] };
@@ -114,7 +130,7 @@ xkb_symbols "qwaf_colemak" {
 };
 
 partial alphanumeric_keys
-xkb_symbols "qwaf_workman" {
+xkb_symbols "workman" {
     include "us(workman)"
 
     key <AD08> { [ i, I ] };
@@ -126,8 +142,3 @@ xkb_symbols "qwaf_workman" {
 
 };
 
-partial alphanumeric_keys
-xkb_symbols "qwaf_hjkl" {
-    include "us_qwaf(qwaf)"
-    include "hjkl"
-};

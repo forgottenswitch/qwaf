@@ -2,6 +2,6 @@ xkb_keymap {
     xkb_keycodes  { include "evdev" };
     xkb_types     { include "complete+level6" };
     xkb_compat    { include "complete+hjkl" };
-    xkb_symbols   { include "pc+inet(evdev)+us_qwaf(qwaf_hjkl)+ctrl(nocaps)+level5_hjkl(semic_lock)+level5_hjkl(space_unlock)" };
+    xkb_symbols   { include "pc+inet(evdev)+hjkl(qwaf)+ctrl(nocaps)+level5_hjkl(semic_lock)+level5_hjkl(space_unlock)" };
     xkb_geometry  { include "pc(pc104)" };
 };
