@@ -1,0 +1,9 @@
+// QWAF with HJKL
+hjkl(qwaf)+ctrl(nocaps)
+
+// QWERTY with HJKL
+hjkl(qwerty)+ctrl(nocaps)
+
+// QWAF with HJKL
+// ";" locks, Space unlocks
+hjkl(qwaf)+ctrl(nocaps)+level5_hjkl(semic_lock)+level5_hjkl(space_unlock)

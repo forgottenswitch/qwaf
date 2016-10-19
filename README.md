@@ -17,8 +17,8 @@ cd qwaf/examples
 ```
 (It will give (lots of) error/warnings even when successfull).
 
-Or assemble your own `.xkb` file
-(like one in `examples/`), and run (note no space after `-I`):
+Or assemble your own `.xkb` file (like the `examples/qwaf_hjkl.xkb`),
+and run (note no space after `-I`):
 ```sh
 xkbcomp -I"path/to/qwaf/" path/to/xkb/file $DISPLAY
 ```
