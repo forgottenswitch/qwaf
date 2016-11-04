@@ -125,8 +125,8 @@ xkb_symbols "lv3" {
 
     key <AB01> { [ NoSymbol, NoSymbol, eth, ETH ] };
     key <AB02> { [ NoSymbol, NoSymbol, asciitilde, dollar ] };
-    key <AB03> { [ NoSymbol, NoSymbol, backslash, bar ] };
-    key <AB04> { [ NoSymbol, NoSymbol, dead_caron, dead_invertedbreve ] };
+    key <AB03> { [ NoSymbol, NoSymbol, dead_caron, dead_invertedbreve ] };
+    key <AB04> { [ NoSymbol, NoSymbol, apostrophe, quotedbl ] };
     key <AB05> { [ NoSymbol, NoSymbol, semicolon, grave ] };
     key <AB06> { [ NoSymbol, NoSymbol, Multi_key, Multi_key ] };
     key <AB07> { [ NoSymbol, NoSymbol, ISO_Next_Group, ISO_Prev_Group ] };
