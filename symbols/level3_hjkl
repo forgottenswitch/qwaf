@@ -1,0 +1,5 @@
+partial alphanumeric_keys modifier_keys
+xkb_symbols "comma_latch" {
+    key <AB08> { [ ISO_Level3_Latch, ISO_Level3_Latch ] };
+    include "level3(modifier_mapping)"
+};
