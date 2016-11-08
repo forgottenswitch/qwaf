@@ -135,9 +135,9 @@ symbols "lv1"
   key SPCE: NoSymbol, space
 
 symbols "swap_menu_rwin"
-    replace key RWIN: Menu, Menu
-    replace key MENU: Super_R, Super_R
-    modifier key MENU: Mod4
+    replace_key RWIN: Menu, Menu
+    replace_key MENU: Super_R, Super_R
+    modifier_key MENU: Mod4
 
 symbols "latching_shifts"
     key RTSH: ISO_Level2_Latch, ISO_Level2_Latch
@@ -147,23 +147,23 @@ symbols "latching_shifts"
 # Requires "hjkl" in the xkb_compat.
 # Fixes Shift+Cursor Keys selection not working in MonoDevelop.
 # Does not work with Xserver 1.18.1 - 1.18.4
-xkb_symbols "redirs"
+symbols "redirs"
   levels 5,6
 
-  key AC06: ISO_Fast_Cursor_Left, ISO_Fast_Cursor_Left ] };
-  key AC07: ISO_Fast_Cursor_Down, ISO_Fast_Cursor_Down ] };
-  key AC08: ISO_Fast_Cursor_Up, ISO_Fast_Cursor_Up ] };
-  key AC09: ISO_Fast_Cursor_Right, ISO_Fast_Cursor_Right ] };
+  key AC06: ISO_Fast_Cursor_Left, ISO_Fast_Cursor_Left
+  key AC07: ISO_Fast_Cursor_Down, ISO_Fast_Cursor_Down
+  key AC08: ISO_Fast_Cursor_Up, ISO_Fast_Cursor_Up
+  key AC09: ISO_Fast_Cursor_Right, ISO_Fast_Cursor_Right
 
-  key AB06: ISO_Partial_Line_Down, ISO_Partial_Line_Down ] };
-  key AD06: ISO_Partial_Line_Up, ISO_Partial_Line_Up ] };
-  key AB08: ISO_Partial_Space_Left, ISO_Partial_Space_Left ] };
-  key AB09: ISO_Partial_Space_Right, ISO_Partial_Space_Right ] };
+  key AB06: ISO_Partial_Line_Down, ISO_Partial_Line_Down
+  key AD06: ISO_Partial_Line_Up, ISO_Partial_Line_Up
+  key AB08: ISO_Partial_Space_Left, ISO_Partial_Space_Left
+  key AB09: ISO_Partial_Space_Right, ISO_Partial_Space_Right
 
-  key AD07: ISO_Set_Margin_Left, ISO_Set_Margin_Left ] };
-  key AD09: ISO_Set_Margin_Right, ISO_Set_Margin_Right ] };
+  key AD07: ISO_Set_Margin_Left, ISO_Set_Margin_Left
+  key AD09: ISO_Set_Margin_Right, ISO_Set_Margin_Right
 
-  key AB07: ISO_Release_Margin_Left, ISO_Release_Margin_Left ] };
-  key AE07: ISO_Release_Margin_Right, ISO_Release_Margin_Right ] };
-  key AD08: ISO_Release_Both_Margins, ISO_Release_Both_Margins ] };
+  key AB07: ISO_Release_Margin_Left, ISO_Release_Margin_Left
+  key AE07: ISO_Release_Margin_Right, ISO_Release_Margin_Right
+  key AD08: ISO_Release_Both_Margins, ISO_Release_Both_Margins
 
