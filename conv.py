@@ -195,6 +195,7 @@ def read_file(filename, as_partials=False):
                     ksyms[lv-1] = keysym
                 cur_defs.keys.append([tok, kcode, ksyms])
             elif tok == "modifier_key":
+                remove_colons_and_commas_in_args()
                 if len(args) != 2:
                     syntax_error("expected a single argument (got {})".format(repr(args[1:])))
                 kcode, *args = args
