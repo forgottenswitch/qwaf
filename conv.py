@@ -7,7 +7,7 @@ import pprint
 import conv.xkb
 
 def usage():
-    print("Usage: conv.py [-o OUTPUT_DIR] INPUT_FILE")
+    print("Usage: conv.py [-o OUTPUT_DIR] [-g] INPUT_FILE")
     print(" Custom keyboard layout compiler")
 
 
@@ -26,6 +26,7 @@ def remove_matches_in_list(ary, regex):
     return ret
 
 outdir = "gen"
+debug = False
 
 in_arg, tail = None, []
 for arg in sys.argv:
@@ -36,6 +37,8 @@ for arg in sys.argv:
         if arg[:1] == "-":
             if arg in ["-o"]:
                 in_arg = arg
+            elif arg in ["-g"]:
+                debug = True
             else:
                 usage()
                 sys.exit(1)
@@ -83,7 +86,11 @@ COMMA_RE = re.compile(r"[ \t]*,[ \t]*")
 COLON_COMMA_RE = re.compile(r"[ \t]*[,:][ \t]*")
 MAX_LEVELS = 8
 
+files_already_read = []
+
 def read_file(filename, as_partials=False):
+    global debug
+
     print("Reading {}".format(filename))
     filename_name = os.path.basename(filename)
 
@@ -102,12 +109,12 @@ def read_file(filename, as_partials=False):
     def split_args_by_commas():
         nonlocal args
         args = split_further(args, COMMA_RE)
-        print("  {}".format(repr(args)))
+        if debug: print("  {}".format(repr(args)))
 
     def remove_colons_and_commas_in_args():
         nonlocal args
         args = remove_matches_in_list(args, COLON_COMMA_RE)
-        print("  {}".format(repr(args)))
+        if debug: print("  {}".format(repr(args)))
 
     def check_for_cur_defs():
         nonlocal filename, nl, cur_defs
@@ -120,7 +127,7 @@ def read_file(filename, as_partials=False):
     cur_levels = [1]
     for nl, l in enumerate(lines, 1):
         toks = shlex.split(l)
-        print(str(toks))
+        if debug: print(str(toks))
         if len(toks):
             tok, *args = toks
             if tok == '#':
@@ -136,7 +143,8 @@ def read_file(filename, as_partials=False):
                 expect_argc(1)
                 indir_file = os.path.join(indir, args[0])
                 cur_defs.includes.append(args[0])
-                if os.path.exists(indir_file):
+                if os.path.exists(indir_file) and args[0] not in files_already_read:
+                    files_already_read.append(args[0])
                     read_file(indir_file, True)
             elif tok == "keytype":
                 expect_argc(1)
@@ -171,18 +179,19 @@ def read_file(filename, as_partials=False):
                 syntax_error("unknown directive '{}'".format(tok))
 
 read_file("layouts")
-print("\nLayouts =============")
-pprint.pprint(layouts)
-print("\nPartials ============")
-pprint.pprint(partials)
-exit()
+if debug:
+    print("\nLayouts =============")
+    pprint.pprint(layouts)
+    print("\nPartials ============")
+    pprint.pprint(partials)
 
 if not os.path.exists(outdir):
     os.mkdir(outdir)
 
 for outm in [conv.xkb]:
     outmdir = os.path.join(outdir, outm.name)
-    print([":", outmdir])
+    print("Converting as {} into {}".format(outm.name, outmdir))
     if not os.path.exists(outmdir):
         os.mkdir(outmdir)
     outm.convert(outdir)
+
