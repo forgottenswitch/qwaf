@@ -6,8 +6,11 @@ DOWNLOADS_DIR = fetch
 all: $(OUTDIR)
 
 $(OUTDIR): conv.py compat symbols types hjkl layouts letters_latin letters_cyr \
-	$(DOWNLOADS_DIR)/keysymdef.h
-	 python3 conv.py -o $@ layouts
+	$(DOWNLOADS_DIR)/keysymdef.h clean
+	 python3 conv.py $(CONV_FLAGS) -o $@ layouts
+
+g: CONV_FLAGS += -g
+g: $(OUTDIR)
 
 $(DOWNLOADS_DIR)/keysymdef.h:
 	mkdir -p $(DOWNLOADS_DIR)

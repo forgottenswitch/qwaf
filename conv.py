@@ -217,5 +217,5 @@ for outm in [conv.xkb]:
     print("Converting as {} into {}".format(outm.name, outmdir))
     if not os.path.exists(outmdir):
         os.mkdir(outmdir)
-    outm.convert(outdir)
+    outm.convert(debug, outmdir, keydefs, layouts, partials)
 
