@@ -54,6 +54,30 @@ def fatal(msg):
     print(msg)
     sys.exit(1)
 
+keydefs = {}
+
+SPACE_RE = re.compile(r"[ \t]+")
+DEFINE_RE = re.compile(r"^[ \t]*#define[ \t]")
+
+def read_keydefs_file(filename):
+    with open(filename, "r") as f:
+        lines = f.readlines()
+    for l in lines:
+        if re.match(DEFINE_RE, l):
+            components = re.split(SPACE_RE, l)
+            symname = components[1][3:]
+            symcode = int(components[2], base=16)
+            if symcode < 0x100:
+                keydefs[symname] = symcode
+            if symcode >= 0x01000100 and symcode <= 0x0110ffff:
+                utfcode = symcode - 0x01000000
+                keydefs[symname] = utfcode
+
+read_keydefs_file("fetch/keysymdef.h")
+
+if debug:
+    pprint.pprint(keydefs)
+
 if not os.path.exists(infile):
     fatal("INPUT_FILE must exist")
 
