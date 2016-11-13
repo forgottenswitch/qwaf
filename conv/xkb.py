@@ -71,6 +71,8 @@ xkb_symbols '{}' {{
             open(filename_lat, "w") as f_lat, \
             open(filename_hjk, "w") as f_hjk:
         for k in partials:
+            k_base_filename = os.path.basename(k.filename)
+
             includes = collect_includes(k.includes)
             includes_nl = "\n"
             if len(includes) == 0:
@@ -82,9 +84,9 @@ xkb_symbols '{}' {{
 }};
 
 """.format(k.name, includes, includes_nl, keys)
-            if re.match(LAT_RE, k.filename):
+            if re.match(LAT_RE, k_base_filename):
                 filename_out, f_out = filename_lat, f_lat
-            elif re.match(CYR_RE, k.filename):
+            elif re.match(CYR_RE, k_base_filename):
                 filename_out, f_out = filename_cyr, f_cyr
             else:
                 filename_out, f_out = filename_hjk, f_hjk

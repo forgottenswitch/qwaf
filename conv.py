@@ -20,9 +20,10 @@ def split_further(ary, sep_re):
 def remove_matches_in_list(ary, regex):
     ret = []
     for x in ary:
-        y = re.sub(regex, "", str(x))
-        if y:
-            ret.append(y)
+        components = re.split(regex, str(x))
+        for y in components:
+            if len(y):
+                ret.append(y)
     return ret
 
 outdir = "gen"
@@ -119,8 +120,8 @@ def read_file(filename, as_partials=False):
     filename_name = os.path.basename(filename)
 
     def syntax_error(msg):
-        nonlocal filename, nl
-        fatal("{}:{}: {}".format(filename, nl, msg))
+        nonlocal filename, nl, l
+        fatal("{}:{}: {}\n  {}".format(filename, nl, msg, l))
 
     def expect_argc(n):
         nonlocal args
@@ -145,10 +146,19 @@ def read_file(filename, as_partials=False):
         if not cur_defs:
             fatal("{}:{}: need to be in 'symbols'".format(filename, nl))
 
+    def str_to_xkb_level(arg):
+        try:
+            x = int(arg)
+        except Exception as e:
+            syntax_error("expected integer (got '{}')".format(arg))
+            if x < 1 or x > MAX_LEVELS:
+                syntax_error("expected integer in [1;{}] (got '{}')".format(MAX_LEVELS, arg))
+        return x
+
     with open(filename, "r") as f:
         lines = f.readlines()
     cur_defs = None
-    cur_levels = [1]
+    cur_level = 1
     for nl, l in enumerate(lines, 1):
         toks = shlex.split(l)
         if debug: print(str(toks))
@@ -165,34 +175,30 @@ def read_file(filename, as_partials=False):
                     layouts.append(cur_defs)
             elif tok == "include":
                 expect_argc(1)
-                indir_file = os.path.join(indir, args[0])
-                cur_defs.includes.append(args[0])
-                if os.path.exists(indir_file) and args[0] not in files_already_read:
-                    files_already_read.append(args[0])
+                inc_arg = args[0]
+                inc_filename = re.sub("[(].*", "", inc_arg)
+                indir_file = os.path.join(indir, inc_filename)
+                cur_defs.includes.append(inc_arg)
+                if os.path.exists(indir_file) and inc_filename not in files_already_read:
+                    files_already_read.append(inc_filename)
                     read_file(indir_file, True)
             elif tok == "keytype":
                 expect_argc(1)
                 cur_defs.keys.append(["keytype", args[0]])
-            elif tok == "levels":
+            elif tok == "level":
                 split_args_by_commas()
                 expect_argc(1)
-                cur_levels = []
-                for arg in args:
-                    try:
-                        x = int(arg)
-                    except Exception as e:
-                        syntax_error("expected integer (got '{}')".format(arg))
-                    if x < 1 or x > MAX_LEVELS:
-                        syntax_error("expected integer in [1;{}] (got '{}')".format(MAX_LEVELS, arg))
-                    cur_levels.append(x)
+                cur_level = str_to_xkb_level(args[0])
             elif tok == "key" or tok == "replace_key":
                 remove_colons_and_commas_in_args()
-                expect_argc(1 + len(cur_levels))
                 kcode, *args = args
                 ksyms = [None] * MAX_LEVELS
-                for i, lv in enumerate(cur_levels):
-                    keysym = args[i]
-                    ksyms[lv-1] = keysym
+                if cur_level is not None:
+                    for i, keysym in enumerate(args):
+                        lv = cur_level + i
+                        if lv > MAX_LEVELS:
+                            syntax_error("only {} levels are supported".format(MAX_LEVELS))
+                        ksyms[lv-1] = keysym
                 cur_defs.keys.append([tok, kcode, ksyms])
             elif tok == "modifier_key":
                 remove_colons_and_commas_in_args()
@@ -204,6 +210,7 @@ def read_file(filename, as_partials=False):
                 syntax_error("unknown directive '{}'".format(tok))
 
 read_file("layouts")
+
 if debug:
     print("\nLayouts =============")
     pprint.pprint(layouts)

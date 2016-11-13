@@ -18,4 +18,4 @@ $(DOWNLOADS_DIR)/keysymdef.h:
 
 .PHONY: clean
 clean:
-	@rm -r $(OUTDIR)
+	@rm -r $(OUTDIR) 2>/dev/null || true

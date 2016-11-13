@@ -1,7 +1,7 @@
 # vim: sw=2
 
 symbols "us"
-  levels 1,2
+  level 1
 
   key TLDE: grave, asciitilde
   key AE01: 1, exclam
@@ -124,7 +124,7 @@ symbols "colemak"
 symbols "workman"
   include "us(workman)"
 
-  levels 1,2
+  level 1
 
   key AD08: i, I
   key AD09: u, U

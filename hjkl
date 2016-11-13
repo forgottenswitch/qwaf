@@ -21,7 +21,7 @@ symbols "lv_1_3_5"
 
 symbols "lv5"
   keytype "SIX_LEVEL"
-  levels 5,6
+  level 5
 
   key TLDE: nobreakspace, U202f
   key AE01: ampersand, ampersand
@@ -75,7 +75,7 @@ symbols "lv5"
   key SPCE: space, space
 
 symbols "lv3"
-  levels 3,4
+  level 3
 
   key TLDE: U200b, U2060
   key AE01: section, exclamdown
@@ -148,7 +148,7 @@ symbols "latching_shifts"
 # Fixes Shift+Cursor Keys selection not working in MonoDevelop.
 # Does not work with Xserver 1.18.1 - 1.18.4
 symbols "redirs"
-  levels 5,6
+  level 5
 
   key AC06: ISO_Fast_Cursor_Left, ISO_Fast_Cursor_Left
   key AC07: ISO_Fast_Cursor_Down, ISO_Fast_Cursor_Down
