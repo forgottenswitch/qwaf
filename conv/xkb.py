@@ -42,7 +42,10 @@ def collect_keys(keys):
 
 def convert(debug, outdir, keydefs, layouts, partials):
     for x in ["symbols", "types", "compat"]:
-        os.mkdir(os.path.join(outdir, x))
+        try:
+            os.mkdir(os.path.join(outdir, x))
+        except FileExistsError:
+            pass
 
     filename_layouts = os.path.join(outdir, "symbols", "qwaf")
 

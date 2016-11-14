@@ -3,6 +3,7 @@ import sys
 import shlex
 import re
 import pprint
+import shutil
 
 import conv.xkb
 
@@ -27,6 +28,7 @@ def remove_matches_in_list(ary, regex):
     return ret
 
 outdir = "gen"
+adddir = "add"
 debug = False
 
 in_arg, tail = None, []
@@ -222,6 +224,19 @@ if not os.path.exists(outdir):
 
 for outm in [conv.xkb]:
     outmdir = os.path.join(outdir, outm.name)
+    addmdir = os.path.join(adddir, outm.name)
+
+    print("Putting additional files from {} to {}".format(addmdir, outmdir))
+
+    def cp_f(src, dst, *, follow_symlinks=True):
+        try:
+            shutil.copy2(src, dst, follow_symlinks=follow_symlinks)
+        except FileExistsError:
+            pass
+
+    shutil.copytree(addmdir, outmdir, symlinks=True, ignore_dangling_symlinks=True,
+            copy_function=cp_f)
+
     print("Converting as {} into {}".format(outm.name, outmdir))
     if not os.path.exists(outmdir):
         os.mkdir(outmdir)
