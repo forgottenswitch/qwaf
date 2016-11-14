@@ -11,7 +11,7 @@ def collect_includes(includes):
     ret = []
     for inc in includes:
         inc = filter_include(inc)
-        s = "  include '{}'".format(inc)
+        s = '  include "{}"'.format(inc)
         ret.append(s)
     return "\n".join(ret)
 
@@ -21,7 +21,7 @@ def collect_keys(keys):
         op, *args = k
         s = ""
         if op == "keytype":
-            s += "  key.type = \"{}\";\n".format(args[0])
+            s += '  key.type = "{}";\n'.format(args[0])
         elif op == "key" or op == "replace_key":
             kcode, levels = args
             replace = ""
@@ -36,7 +36,7 @@ def collect_keys(keys):
             s += ", ".join(levels1)
             s += " ] };"
         elif op == "modifier_key":
-            s += "  modifier map {}: <{}>;".format(args[1], args[0])
+            s += "  modifier_map {} {{ <{}> }};".format(args[1], args[0])
         ret.append(s)
     return "\n".join(ret)
 
@@ -52,8 +52,8 @@ def convert(debug, outdir, keydefs, layouts, partials):
     with open(filename_layouts, "w") as f:
         for k in layouts:
             includes = collect_includes(k.includes)
-            xkb_symbols = """partial alphanumeric
-xkb_symbols '{}' {{
+            xkb_symbols = """partial alphanumeric_keys modifier_keys
+xkb_symbols "{}" {{
 {}
 }};
 
@@ -81,8 +81,8 @@ xkb_symbols '{}' {{
             if len(includes) == 0:
                 includes_nl = ""
             keys = collect_keys(k.keys)
-            xkb_symbols = """partial alphanumeric
-xkb_symbols '{}' {{
+            xkb_symbols = """partial alphanumeric_keys modifier_keys
+xkb_symbols "{}" {{
 {}{}{}
 }};
 

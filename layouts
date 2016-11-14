@@ -1,11 +1,11 @@
 # vim: sw=2
 
 symbols "de"
-    include "letters_latin(de)"
+    include "letters_lat(de)"
     include "hjkl"
 
 symbols "fr"
-    include "letters_latin(fr)"
+    include "letters_lat(fr)"
     include "hjkl"
 
 symbols "qwerty"
@@ -13,7 +13,7 @@ symbols "qwerty"
     include "hjkl"
 
 symbols "qwaf"
-    include "letters_latin(us)"
+    include "letters_lat(us)"
     include "hjkl"
 
 symbols "ru"

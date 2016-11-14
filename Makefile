@@ -5,7 +5,7 @@ DOWNLOADS_DIR = fetch
 
 all: $(OUTDIR)
 
-$(OUTDIR): conv.py add  hjkl layouts letters_latin letters_cyr \
+$(OUTDIR): conv.py add  hjkl layouts letters_lat letters_cyr \
 	$(DOWNLOADS_DIR)/keysymdef.h clean
 	 python3 -B conv.py $(CONV_FLAGS) -o $@ layouts
 

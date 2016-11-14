@@ -56,14 +56,14 @@ symbols "us"
   key BKSL: backslash, bar
 
 symbols "de"
-  include "letters_latin(us)"
+  include "letters_lat(us)"
 
   key AD01: y, Y
   key AD06: z, Z
   key AB01: q, Q
 
 symbols "fr"
-  include "letters_latin(us)"
+  include "letters_lat(us)"
 
   key AD01: w, W
   key AD02: v, V

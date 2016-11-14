@@ -50,7 +50,7 @@ symbols "lv3"
   key AC06: Cyrillic_ha, Cyrillic_HA
 
 # Supposed all-in-one cyrillic international layout.
-# Not tested, for conflicts with letters_latin(lv3) in particular.
+# Not tested, for conflicts with letters_lat(lv3) in particular.
 #
 symbols "lv3_intl"
   level 3
