@@ -1,0 +1,169 @@
+# vim: sw=2
+
+symbols "shift"
+  include "hjkl(lv_1_3_5)"
+  include "hjkl(redirs)"
+  include "level3_hjkl(comma_latch)"
+  include "level5_hjkl(semic_shift)"
+  include "level5_hjkl(ralt_lock)"
+
+symbols "lock"
+  include "hjkl(lv_1_3_5)"
+  include "hjkl(redirs)"
+  include "level3_hjkl(comma_latch)"
+  include "level5_hjkl(semic_lock)"
+  include "level5_hjkl(ralt_lock)"
+
+symbols "lv_1_3_5"
+  include "hjkl(lv1)"
+  include "hjkl(lv3)"
+  include "hjkl(lv5)"
+
+symbols "lv5"
+  keytype "SIX_LEVEL"
+  level 5
+
+  key TLDE: nobreakspace, U202f
+  key AE01: ampersand, ampersand
+  key AE02: plus, plusminus
+  key AE03: less, guillemotleft
+  key AE04: greater, guillemotright
+  key AE05: minus, bar
+  key AE06: asciicircum, at
+  key AE07: Insert, Insert
+  key AE08: Menu, Menu
+  key AE09: leftsinglequotemark, U201b
+  key AE10: rightsinglequotemark, singlelowquotemark
+
+  key TAB : Tab, ISO_Left_Tab
+  key AD01: exclam, question
+  key AD02: colon, comma
+  key AD03: parenleft, at
+  key AD04: equal, numbersign
+  key AD05: Tab, ISO_Left_Tab
+  key AD06: Page_Up, Page_Up
+  key AD07: BackSpace, BackSpace
+  key AD08: Escape, Escape
+  key AD09: Delete, Delete
+  key AD10: Print, Print
+  key AD11: XF86Back, XF86Back
+  key AD12: XF86Forward, XF86Forward
+
+  key AC01: slash, comma
+  key AC02: ISO_Level2_Latch, ISO_Level2_Latch
+  key AC03: braceleft, braceright
+  key AC04: bracketleft, bracketright
+  key AC05: parenright, asterisk
+  key AC06: Left, Left
+  key AC07: Down, Down
+  key AC08: Up, Up
+  key AC09: Right, Right
+  key AC10: NoSymbol, NoSymbol
+  key AC11: Insert, Insert
+
+  key AB01: percent, U2215
+  key AB02: dollar, asciitilde
+  key AB03: backslash, bar
+  key AB04: quotedbl, apostrophe
+  key AB05: semicolon, grave
+  key AB06: Page_Down, Page_Down
+  key AB07: Return, Return
+  key AB08: Home, Home
+  key AB09: End, End
+  key AB10: ISO_Level5_Lock, ISO_Level5_Lock
+
+  key SPCE: space, space
+
+symbols "lv3"
+  level 3
+
+  key TLDE: U200b, U2060
+  key AE01: section, exclamdown
+  key AE02: schwa, SCHWA
+  key AE03: U025b, U0190
+  key AE04: ezh, EZH
+  key AE05: dead_macron, dead_belowmacron
+  key AE06: dead_breve, dead_belowbreve
+  key AE07: eng, ENG
+  key AE08: thorn, THORN
+  key AE09: leftdoublequotemark, U201f
+  key AE10: rightdoublequotemark, doublelowquotemark
+  key AE11: emdash, endash
+  key AE12: division, multiply
+
+  key TAB : Undo, Redo
+  key AD01: dead_abovering, dead_belowring
+  key AD02: ssharp, U1e9e
+  key AD03: guillemotleft, guillemotright
+  key AD04: dead_ogonek, dead_abovereversedcomma
+  key AD05: dead_circumflex, dead_belowcircumflex
+  key AD06: dead_currency, dead_currency
+  key AD07: dead_diaeresis, dead_belowdiaeresis
+  key AD08: dead_stroke, dead_horn
+  key AD09: U0140, U013f
+  key AD10: kra, U017f
+  key AD11: ordfeminine, masculine
+  key AD12: hyphen, horizconnector
+
+  key AC01: dead_cedilla, dead_hook
+  key AC02: ISO_Level2_Latch, ISO_Level2_Latch
+  key AC03: dead_abovedot, dead_belowdot
+  key AC04: dead_acute, dead_doubleacute
+  key AC05: dead_grave, dead_doublegrave
+  key AC06: U200c, U200d
+  key AC07: underscore, underscore
+  key AC08: dead_tilde, dead_belowtilde
+  key AC09: dead_belowcomma, dead_abovecomma
+  key AC10: NoSymbol, NoSymbol
+  key AC11: apostrophe, quotedbl
+
+  key AB01: eth, ETH
+  key AB02: asciitilde, dollar
+  key AB03: dead_caron, dead_invertedbreve
+  key AB04: apostrophe, quotedbl
+  key AB05: semicolon, grave
+  key AB06: Multi_key, Multi_key
+  key AB07: ISO_Next_Group, ISO_Prev_Group
+  key AB08: comma, less
+  key AB09: Menu, greater
+  key AB10: dead_greek, dead_greek
+
+  key SPCE: space, space
+
+symbols "lv1"
+  key AC11: comma, colon
+  key SPCE: NoSymbol, space
+
+symbols "swap_menu_rwin"
+    replace_key RWIN: Menu, Menu
+    replace_key MENU: Super_R, Super_R
+    modifier_key MENU: Mod4
+
+symbols "latching_shifts"
+    key RTSH: ISO_Level2_Latch, ISO_Level2_Latch
+    key LFSH: ISO_Level2_Latch, ISO_Level2_Latch
+
+# "lv5" implemented with RedirectKey.
+# Requires "hjkl" in the xkb_compat.
+# Fixes Shift+Cursor Keys selection not working in MonoDevelop.
+# Does not work with Xserver 1.18.1 - 1.18.4
+symbols "redirs"
+  level 5
+
+  key AC06: ISO_Fast_Cursor_Left, ISO_Fast_Cursor_Left
+  key AC07: ISO_Fast_Cursor_Down, ISO_Fast_Cursor_Down
+  key AC08: ISO_Fast_Cursor_Up, ISO_Fast_Cursor_Up
+  key AC09: ISO_Fast_Cursor_Right, ISO_Fast_Cursor_Right
+
+  key AB06: ISO_Partial_Line_Down, ISO_Partial_Line_Down
+  key AD06: ISO_Partial_Line_Up, ISO_Partial_Line_Up
+  key AB08: ISO_Partial_Space_Left, ISO_Partial_Space_Left
+  key AB09: ISO_Partial_Space_Right, ISO_Partial_Space_Right
+
+  key AD07: ISO_Set_Margin_Left, ISO_Set_Margin_Left
+  key AD09: ISO_Set_Margin_Right, ISO_Set_Margin_Right
+
+  key AB07: ISO_Release_Margin_Left, ISO_Release_Margin_Left
+  key AE07: ISO_Release_Margin_Right, ISO_Release_Margin_Right
+  key AD08: ISO_Release_Both_Margins, ISO_Release_Both_Margins
+

@@ -1,0 +1,33 @@
+# vim: sw=2
+
+symbols "de"
+    include "letters_lat(de)"
+    include "hjkl"
+
+symbols "fr"
+    include "letters_lat(fr)"
+    include "hjkl"
+
+symbols "qwerty"
+    include "us"
+    include "hjkl"
+
+symbols "qwaf"
+    include "letters_lat(us)"
+    include "hjkl"
+
+symbols "ru"
+  include "layouts(qwerty)"
+  include "letters_cyr(qwaf)"
+
+symbols "ru_dvorak"
+  include "layouts(qwerty)"
+  include "letters_cyr(dvorak)"
+
+symbols "ru_intl"
+  include "layouts(qwerty)"
+  include "letters_cyr(qwaf_intl)"
+
+symbols "ru_srp"
+  include "layouts(qwerty)"
+  include "letters_cyr(qwaf_srp)"
