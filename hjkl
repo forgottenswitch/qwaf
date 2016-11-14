@@ -131,17 +131,23 @@ symbols "lv3"
   key SPCE: space, space
 
 symbols "lv1"
+  level 1
+
   key AC11: comma, colon
   key SPCE: NoSymbol, space
 
 symbols "swap_menu_rwin"
-    replace_key RWIN: Menu, Menu
-    replace_key MENU: Super_R, Super_R
-    modifier_key MENU: Mod4
+  level 1
+
+  replace_key RWIN: Menu, Menu
+  replace_key MENU: Super_R, Super_R
+  modifier_key MENU: Mod4
 
 symbols "latching_shifts"
-    key RTSH: ISO_Level2_Latch, ISO_Level2_Latch
-    key LFSH: ISO_Level2_Latch, ISO_Level2_Latch
+  level 1
+
+  key RTSH: ISO_Level2_Latch, ISO_Level2_Latch
+  key LFSH: ISO_Level2_Latch, ISO_Level2_Latch
 
 # "lv5" implemented with RedirectKey.
 # Requires "hjkl" in the xkb_compat.
