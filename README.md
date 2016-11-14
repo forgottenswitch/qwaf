@@ -1,14 +1,13 @@
 QWAF
 ====
 
-Qwerty-like keyboard layout.
-Has an `hjkl` "module", which makes `,` a prefix, `;` a modifier,
+Latin/cyrillic keyboard layout trying to be similar to Qwerty.
+
+The `hjkl` "module" makes `,` a prefix, `;` a modifier,
 `,m` a layout switcher, and `,n` a Compose key.
-Also has a cyrillic variant.
 
 Currently XKB-only.
 
-Is intended to be intuitive after QWERTY.
 International/Dvorak/etc. variants almost aren't tested.
 
 Running on XKB
@@ -19,14 +18,14 @@ make
 ./examples/run_xkb_example.sh
 ./examples/run_example.sh 1
 ```
-(Even when successfull, it will still give an error and lots of warnings).
+(Ignore the error and lots of warnings it would give).
 
-Or assemble your own `.xkb` file (like `examples/qwaf_hjkl.xkb`),
-and run (without a space after `-I`):
+Or assemble an `.xkb` file (like `examples/qwaf_hjkl.xkb`), and run:
 ```sh
 xkbcomp -I"/path/to/qwaf/gen/xkb" /path/to/xkb/file $DISPLAY
 ```
-To launch it at login, put the above in, say, `~/xkb.sh` file,
+
+To install QWAF [for current user], put the above in a file, like `~/xkb.sh`
 and add the `sh ~/xkb.sh` to autostart
 (by putting this into `~/.xinitrc`, or tweaking desktop settings).
 
