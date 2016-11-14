@@ -1,0 +1,40 @@
+symbols "semic_shift"
+  level 1
+  keytype "SIX_LEVEL"
+  key AC10: ISO_Level5_Shift, ISO_Level5_Shift, ISO_Level5_Shift, ISO_Level5_Shift, ISO_Level5_Shift, ISO_Level5_Shift
+  include "level5(modifier_mapping)"
+
+symbols "semic_lock"
+  level 1
+  keytype "SIX_LEVEL"
+  key AC10: ISO_Level5_Shift, ISO_Level5_Shift, ISO_Level5_Shift, ISO_Level5_Shift, ISO_Level5_Shift, ISO_Level5_Shift
+  include "level5(modifier_mapping)"
+
+symbols "caps_shift"
+  level 1
+  keytype "SIX_LEVEL"
+  key CAPS: ISO_Level5_Shift, ISO_Level5_Shift, ISO_Level5_Shift, ISO_Level5_Shift, ISO_Level5_Shift, ISO_Level5_Shift
+  include "level5(modifier_mapping)"
+
+symbols "caps_shift_and_lock"
+  level 1
+  keytype "SIX_LEVEL"
+  key CAPS: ISO_Level5_Shift, ISO_Level5_Shift, ISO_Level5_Lock, ISO_Level5_Lock, ISO_Level5_Lock, ISO_Level5_Shift
+  include "level5(modifier_mapping)"
+
+symbols "caps_lock"
+  level 1
+  keytype "SIX_LEVEL"
+  key CAPS: ISO_Level5_Lock, ISO_Level5_Lock, ISO_Level5_Lock, ISO_Level5_Lock, ISO_Level5_Lock, ISO_Level5_Lock
+  include "level5(modifier_mapping)"
+
+# optionally accompanies the "semic_lock"
+# Would be more appropriate with "semic_latching_lock".
+symbols "space_unlock"
+  level 1
+  key SPCE: NoSymbol,NoSymbol, NoSymbol,NoSymbol, ISO_Level5_Lock, ISO_Level5_Lock
+
+symbols "ralt_lock"
+  level 1
+  replace_key RALT: ISO_Level5_Lock, ISO_Level5_Lock, ISO_Level5_Lock, ISO_Level5_Lock, ISO_Level5_Lock, ISO_Level5_Lock
+  include "level5(modifier_mapping)"

@@ -1,0 +1,6 @@
+symbols "comma_latch"
+  level 1
+
+  key AB08: ISO_Level3_Latch, ISO_Level3_Latch
+
+  include "level3(modifier_mapping)"

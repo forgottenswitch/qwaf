@@ -4,8 +4,10 @@ import shlex
 import re
 import pprint
 import shutil
+import copy
 
 import conv.xkb
+import conv.svg
 
 def usage():
     print("Usage: conv.py [-o OUTPUT_DIR] [-g] INPUT_FILE")
@@ -89,12 +91,33 @@ indir = os.path.dirname(infile)
 layouts = []
 partials = []
 
+PAREN_RE = re.compile(r"[()]+")
+
+def get_part_by_name(s):
+    components = re.split(PAREN_RE, s)
+    if len(components) < 2:
+        if debug:
+            print("Missing partial file name: '{}'".format(s))
+        filename = components[0]
+        partname = None
+    else:
+        filename, partname, *_ = components
+    for x in (partials + layouts):
+        if x.filename == filename:
+            if not partname or x.name == partname:
+                return x
+    if debug:
+        print("Missing any symbols in file '{}'".format(filename))
+
+
 class Keydefs:
     def __init__(self, filename, name):
         self.filename = filename
         self.name = name
         self.includes = []
         self.keys = []
+        self.compiled = False
+        self.compiled_keys = []
 
     def __str__(self):
         keys = ""
@@ -108,6 +131,34 @@ class Keydefs:
 
     def __repr__(self):
         return self.__str__()
+
+    def compile(self):
+        if self.compiled:
+            return
+        print("Compiling '{}({})'".format(self.filename, self.name))
+        self.compiled_keys = copy.copy(self.keys)
+        for inc in self.includes:
+            partial = get_part_by_name(inc)
+            if not partial:
+                if debug:
+                    print("Considering '{}' to be a system partial (cannot find it)".format(inc))
+            else:
+                partial.compile()
+                for key in partial.compiled_keys:
+                    merged = False
+                    if key[0] == "key":
+                        for k1 in self.compiled_keys:
+                            if k1[:2] == key[:2]:
+                                merged = True
+                                for lv, ksym in enumerate(key[2]):
+                                    if ksym:
+                                        k1[2][lv] = ksym
+                    if not merged:
+                        self.compiled_keys.append(key)
+        self.compiled_keys.sort()
+        if debug:
+            print("Compiled '{}({})': {}".format(self.filename, self.name, self.compiled_keys))
+        self.compiled = True
 
 COMMA_RE = re.compile(r"[ \t]*,[ \t]*")
 COLON_COMMA_RE = re.compile(r"[ \t]*[,:][ \t]*")
@@ -213,6 +264,9 @@ def read_file(filename, as_partials=False):
 
 read_file("layouts")
 
+for x in layouts:
+    x.compile()
+
 if debug:
     print("\nLayouts =============")
     pprint.pprint(layouts)
@@ -222,20 +276,21 @@ if debug:
 if not os.path.exists(outdir):
     os.mkdir(outdir)
 
-for outm in [conv.xkb]:
+for outm in [conv.xkb, conv.svg]:
     outmdir = os.path.join(outdir, outm.name)
     addmdir = os.path.join(adddir, outm.name)
 
-    print("Putting additional files from {} to {}".format(addmdir, outmdir))
+    if os.path.exists(addmdir):
+        print("Putting additional files from {} to {}".format(addmdir, outmdir))
 
-    def cp_f(src, dst, *, follow_symlinks=True):
-        try:
-            shutil.copy2(src, dst, follow_symlinks=follow_symlinks)
-        except FileExistsError:
-            pass
+        def cp_f(src, dst, *, follow_symlinks=True):
+            try:
+                shutil.copy2(src, dst, follow_symlinks=follow_symlinks)
+            except FileExistsError:
+                pass
 
-    shutil.copytree(addmdir, outmdir, symlinks=True, ignore_dangling_symlinks=True,
-            copy_function=cp_f)
+        shutil.copytree(addmdir, outmdir, symlinks=True, ignore_dangling_symlinks=True,
+                copy_function=cp_f)
 
     print("Converting as {} into {}".format(outm.name, outmdir))
     if not os.path.exists(outmdir):
