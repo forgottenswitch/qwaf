@@ -83,7 +83,7 @@ symbols "lv3_intl"
 
   key AC01: U0499, U0498
   key AC08: Ukrainian_i,  Ukrainian_I
-  key AC11: dead_macron, dead_belowmacron ]
+  key AC11: dead_macron, dead_belowmacron
 
   key AB03: Cyrillic_zhe_descender,  Cyrillic_ZHE_descender
   key AB05: Ukrainian_ie, Ukrainian_IE

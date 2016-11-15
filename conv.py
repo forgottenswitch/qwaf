@@ -136,7 +136,7 @@ class Keydefs:
         if self.compiled:
             return
         print("Compiling '{}({})'".format(self.filename, self.name))
-        self.compiled_keys = copy.copy(self.keys)
+        self.compiled_keys = copy.deepcopy(self.keys)
         for inc in self.includes:
             partial = get_part_by_name(inc)
             if not partial:
@@ -214,7 +214,8 @@ def read_file(filename, as_partials=False):
     cur_level = 1
     for nl, l in enumerate(lines, 1):
         toks = shlex.split(l)
-        if debug: print(str(toks))
+        if debug:
+            print(str(toks))
         if len(toks):
             tok, *args = toks
             if tok == '#':
@@ -263,6 +264,8 @@ def read_file(filename, as_partials=False):
                 syntax_error("unknown directive '{}'".format(tok))
 
 read_file("layouts")
+read_file("level3_hjkl", as_partials=True)
+read_file("level5_hjkl", as_partials=True)
 
 for x in layouts:
     x.compile()

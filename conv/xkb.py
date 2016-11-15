@@ -66,13 +66,17 @@ xkb_symbols "{}" {{
     filename_cyr = os.path.join(outdir, "symbols", "qwaf_cyr")
     filename_lat = os.path.join(outdir, "symbols", "qwaf_lat")
     filename_hjk = os.path.join(outdir, "symbols", "hjkl")
+    filename_lv3 = os.path.join(outdir, "symbols", "level3_hjkl")
+    filename_lv5 = os.path.join(outdir, "symbols", "level5_hjkl")
 
     CYR_RE = re.compile("^letters_cyr")
     LAT_RE = re.compile("^letters_lat")
 
     with open(filename_cyr, "w") as f_cyr, \
             open(filename_lat, "w") as f_lat, \
-            open(filename_hjk, "w") as f_hjk:
+            open(filename_hjk, "w") as f_hjk, \
+            open(filename_lv3, "w") as f_lv3, \
+            open(filename_lv5, "w") as f_lv5:
         for k in partials:
             k_base_filename = os.path.basename(k.filename)
 
@@ -91,10 +95,14 @@ xkb_symbols "{}" {{
                 filename_out, f_out = filename_lat, f_lat
             elif re.match(CYR_RE, k_base_filename):
                 filename_out, f_out = filename_cyr, f_cyr
+            elif k_base_filename == "level3_hjkl":
+                filename_out, f_out = filename_lv3, f_lv3
+            elif k_base_filename == "level5_hjkl":
+                filename_out, f_out = filename_lv5, f_lv5
             else:
                 filename_out, f_out = filename_hjk, f_hjk
             if debug:
-                print("Into {}:".format(filename_out))
+                print("Into {} (from {}):".format(filename_out, k_base_filename))
                 print(xkb_symbols, end="")
             f_out.write(xkb_symbols)
 
