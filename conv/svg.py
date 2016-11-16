@@ -42,7 +42,11 @@ def convert(debug, outdir, keydefs, layouts, partials):
                     else:
                         xpos = int(key_w * 1.0 + (key_b + key_w) * (column-1) + key_b * 2)
                         ypos = int(key_b)
-                    keys.append("""<rect x="{}" y="{}" width="{}" height="{}" fill="blue" />""".format(xpos, ypos, key_w, key_h))
+
+                    ksym = str(keysyms[0]).capitalize()
+                    keys.append("""<rect x="{}" y="{}" width="{}" height="{}" fill="#E9B96E" />""".format(xpos, ypos, key_w, key_h))
+                    keys.append("""<text x="{}" y="{}" fill="white" stroke="black" stroke-width="{}"
+        font-family="sans-serif" font-size="{}px">{}</text>""".format(xpos+key_w*0.35, ypos+key_h*0.6, key_w*0.02, key_w*0.4, ksym))
 
         svg_name = os.path.join(outldir, lt.name + ".svg")
         if debug:
@@ -51,7 +55,7 @@ def convert(debug, outdir, keydefs, layouts, partials):
         with open(svg_name, "w") as f:
             f.write("""
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1">
-    <rect x="0" y="0" width="{kbd_w}" height="{kbd_h}" fill="white" />
+    <rect x="0" y="0" width="{kbd_w}" height="{kbd_h}" fill="gray" />
     {keys}
 """.format(
         kbd_w=(key_w*15+key_b*16),
