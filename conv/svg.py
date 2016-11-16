@@ -83,15 +83,15 @@ def convert(debug, outdir, keydefs, layouts, partials):
                     def to_utf_char(s):
                         if s is None:
                             return
+                        if s in special_ksyms:
+                            return special_ksyms[s]
                         if s not in ksyms:
                             if s.startswith("U"):
                                 return int(s[1:], base=16)
                             return s
-                        code = ksyms[s]
-                        if code < 128:
+                        code = ksyms.get(s)
+                        if code:
                             return "&#{};".format(code)
-                        if s in special_ksyms:
-                            return special_ksyms[s]
                         return s
 
                     ksym1 = to_utf_char(ksym1)
@@ -145,9 +145,26 @@ def read_keysymdefs(outdir):
             if not lin.startswith("#define"):
                 continue
             words = re.split(SPACE_RE, lin)
+
             symname = words[1]
             symval = words[2]
+            for word in words:
+                if word.startswith("U+"):
+                    symval = word
+                    break
+
             kname = symname[3:]
-            ksym = int(symval, base=16)
+            #print([kname, symval])
+
+            if symval.startswith("U+"):
+                ksym = int(symval[2:], base=16)
+            else:
+                ksym = int(symval, base=16)
+                if ksym > 0x10000000:
+                    ksym -= 0x10000000
+                else:
+                    continue
+
+            #print([kname, ksym])
             ksyms[kname] = ksym
 
