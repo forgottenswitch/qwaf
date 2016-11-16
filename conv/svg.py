@@ -65,10 +65,19 @@ def convert(debug, outdir, keydefs, layouts, partials):
                         xpos = int(key_w * tilde_mul + (key_b + key_w) * (column-1) + key_b * 2)
                         ypos = int(key_b)
 
-                    ksym = str(keysyms[0]).capitalize()
                     keys.append("""<rect x="{}" y="{}" width="{}" height="{}" fill="#E9B96E" />""".format(xpos, ypos, key_w, key_h))
-                    keys.append("""<text x="{}" y="{}" fill="white" stroke="black" stroke-width="{}"
-        font-family="sans-serif" font-size="{}px">{}</text>""".format(xpos+key_w*0.35, ypos+key_h*0.6, key_w*0.02, key_w*0.4, ksym))
+
+                    ksym1 = str(keysyms[0])
+                    ksym2 = str(keysyms[1])
+
+                    if ksym1 and ksym2 and ksym2 != ksym1.capitalize():
+                        keys.append("""<text x="{}" y="{}" fill="white" stroke="black" stroke-width="{}" font-size="{}px">{}</text>""".
+                                format(xpos+key_w*0.3, ypos+key_h*0.85, key_w*0.01, key_w*0.4, ksym1))
+                        keys.append("""<text x="{}" y="{}" fill="white" stroke="black" stroke-width="{}" font-size="{}px">{}</text>""".
+                                format(xpos+key_w*0.3, ypos+key_h*0.35, key_w*0.01, key_w*0.4, ksym2))
+                    else:
+                        keys.append("""<text x="{}" y="{}" fill="white" stroke="black" stroke-width="{}" font-family="sans-serif" font-size="{}px">{}</text>""".
+                                format(xpos+key_w*0.35, ypos+key_h*0.6, key_w*0.02, key_w*0.4, ksym1.capitalize()))
 
         svg_name = os.path.join(outldir, lt.name + ".svg")
         if debug:
