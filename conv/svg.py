@@ -54,6 +54,8 @@ def convert(debug, outdir, keydefs, layouts, partials):
 
             if directive == "key":
                 keycode, keysyms = args
+                if debug:
+                    print(["svg: lkey", lt.name, keycode, keysyms])
 
                 if keycode[:2] in ["AB", "AC", "AD", "AE"] or keycode in ["TLDE", "BKSL"]:
                     if keycode == "TLDE":
@@ -81,15 +83,16 @@ def convert(debug, outdir, keydefs, layouts, partials):
                     ksym2 = str(keysyms[1])
 
                     def to_utf_char(s):
+                        code = None
                         if s is None:
                             return
                         if s in special_ksyms:
                             return special_ksyms[s]
                         if s not in ksyms:
                             if s.startswith("U"):
-                                return int(s[1:], base=16)
-                            return s
-                        code = ksyms.get(s)
+                                code = int(s[1:], base=16)
+                        else:
+                            code = ksyms.get(s)
                         if code:
                             return "&#{};".format(code)
                         return s

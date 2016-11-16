@@ -13,6 +13,7 @@ def usage():
     print("Usage: conv.py [-o OUTPUT_DIR] [-g] INPUT_FILE")
     print(" Custom keyboard layout compiler")
 
+MAX_LEVELS = 8
 
 def split_further(ary, sep_re):
     ret = []
@@ -93,6 +94,8 @@ partials = []
 
 PAREN_RE = re.compile(r"[()]+")
 
+standard_keydefs = []
+
 def get_part_by_name(s):
     components = re.split(PAREN_RE, s)
     if len(components) < 2:
@@ -102,13 +105,12 @@ def get_part_by_name(s):
         partname = None
     else:
         filename, partname, *_ = components
-    for x in (partials + layouts):
+    for x in (partials + layouts + standard_keydefs):
         if x.filename == filename:
             if not partname or x.name == partname:
                 return x
     if debug:
         print("Missing any symbols in file '{}'".format(filename))
-
 
 class Keydefs:
     def __init__(self, filename, name):
@@ -116,8 +118,14 @@ class Keydefs:
         self.name = name
         self.includes = []
         self.keys = []
+        self.already_merged = []
         self.compiled = False
         self.compiled_keys = []
+
+    def xkbname(self):
+        if self.name:
+            return "{}({})".format(self.filename, self.name)
+        return self.filename
 
     def __str__(self):
         keys = ""
@@ -132,37 +140,106 @@ class Keydefs:
     def __repr__(self):
         return self.__str__()
 
-    def compile(self):
+    def compile(self, indent=""):
+        indent1 = indent + " "
         if self.compiled:
             return
-        print("Compiling '{}({})'".format(self.filename, self.name))
-        self.compiled_keys = copy.deepcopy(self.keys)
+        print("{}Compiling '{}'".format(indent, self.xkbname()))
+        self.compiled_keys = []
         for inc in self.includes:
             partial = get_part_by_name(inc)
+
             if not partial:
-                if debug:
-                    print("Considering '{}' to be a system partial (cannot find it)".format(inc))
+                print("{}Not merging '{}' into '{}'".format(indent1, inc, self.xkbname()))
             else:
-                partial.compile()
-                for key in partial.compiled_keys:
-                    merged = False
-                    if key[0] == "key":
-                        for k1 in self.compiled_keys:
-                            if k1[:2] == key[:2]:
-                                merged = True
-                                for lv, ksym in enumerate(key[2]):
-                                    if ksym:
-                                        k1[2][lv] = ksym
-                    if not merged:
-                        self.compiled_keys.append(key)
+                partial.compile(indent1)
+                print("{}Merging '{}' into '{}'; already: {}".format(indent1, inc, self.xkbname(), self.already_merged))
+                self.merge_keys(partial.xkbname(), partial.compiled_keys)
+        self.merge_keys("<self>", self.keys)
         self.compiled_keys.sort()
         if debug:
-            print("Compiled '{}({})': {}".format(self.filename, self.name, self.compiled_keys))
+            print("Compiled '{}': {}".format(self.xkbname(), self.compiled_keys))
         self.compiled = True
+
+    def merge_keys(self, ident, keys):
+        self.already_merged.append(ident)
+        for key in keys:
+            merged = False
+            if key[0] == "key":
+                for k1 in self.compiled_keys:
+                    if k1[:2] == key[:2]:
+                        merged = True
+                        for lv, ksym in enumerate(key[2]):
+                            if ksym:
+                                k1[2][lv] = ksym
+            if not merged:
+                self.compiled_keys.append(copy.deepcopy(key))
+
+def keys_to_defs(filename, name, keys):
+    kd = Keydefs(filename, name)
+    kd_keys = []
+
+    def process_keydef(kcode, syms):
+        syms = copy.copy(syms)
+        if isinstance(syms, str):
+            syms = [syms.lower(), syms]
+        for i,sym in enumerate(syms):
+            sym = ord(sym)
+            syms[i] = "U" + (int_to_base(sym, 16)).zfill(4)
+        while len(syms) < MAX_LEVELS:
+            syms.append(None)
+        keydef = ["key", kcode, copy.deepcopy(syms)]
+        if debug:
+            print("predefining {} {}: {}".format(filename, name, keydef))
+        kd_keys.append(keydef)
+
+    for kn in keys:
+        if kn in ["AB","AC","AD","AE"]:
+            for col, syms in enumerate(keys[kn], 1):
+                col = str(col).zfill(2)
+                process_keydef("{}{}".format(kn, col), syms)
+        else:
+            process_keydef(kn, keys[kn])
+    kd.merge_keys(kd.xkbname(), kd_keys)
+    kd.compiled = True
+    if debug:
+        print(kd_keys)
+        print("Compiled keys {}:\n".format(kd.xkbname(), kd.compiled_keys))
+    return kd
+
+def hex_digit(x):
+    u = 0
+    if x < 10:
+        u = ord("0") + int(x)
+    elif x < 16:
+        u = ord("a") + int(x - 10)
+    return chr(u)
+
+def int_to_base(n, base):
+    divisor = 1
+    while divisor < n:
+        divisor *= base
+
+    digits = []
+    while n > base:
+        divisor /= base
+        d, n = divmod(n, divisor)
+        digits.append(hex_digit(int(d)))
+    digits.append(hex_digit(int(n)))
+
+    return "".join(digits)
+
+standard_keydefs.append(keys_to_defs("us", "", {
+    "AE": [ ["1","!"], ["2","@"], ["3","#"], ["4","$"], ["5","%"], ["6","^"], ["7","&"], ["8","*"], ["9","("], ["0",")"], ["-","_"], ["=","+"] ],
+    "AD": [ "Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P", ["[","{"], ["]","}"] ],
+    "AC": [ "A", "S", "D", "F", "G", "H", "J", "K", "L", [";",":"], ["'", '"'] ],
+    "AB": [ "Z", "X", "C", "V", "B", "N", "M", [",","<"], [".",">"], ["/","?"] ],
+    "TLDE": ["`","~"],
+    "BKSL": ["\\","|"],
+    }))
 
 COMMA_RE = re.compile(r"[ \t]*,[ \t]*")
 COLON_COMMA_RE = re.compile(r"[ \t]*[,:][ \t]*")
-MAX_LEVELS = 8
 
 files_already_read = []
 
