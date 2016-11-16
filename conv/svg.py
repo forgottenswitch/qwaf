@@ -1,9 +1,19 @@
 import os
 import re
+import sys
 
 name = "svg"
 
+ksyms = {}
+
+special_ksyms = {
+    "ISO_Level5_Shift": "Lv5",
+    "ISO_Level3_Latch": "Lv3",
+}
+
 def convert(debug, outdir, keydefs, layouts, partials):
+    read_keysymdefs(outdir)
+
     outldir = os.path.join(outdir, "layouts")
     outpdir = os.path.join(outdir, "partials")
 
@@ -70,14 +80,37 @@ def convert(debug, outdir, keydefs, layouts, partials):
                     ksym1 = str(keysyms[0])
                     ksym2 = str(keysyms[1])
 
-                    if ksym1 and ksym2 and ksym2 != ksym1.capitalize():
+                    def to_utf_char(s):
+                        if s is None:
+                            return
+                        if s not in ksyms:
+                            if s.startswith("U"):
+                                return int(s[1:], base=16)
+                            return s
+                        code = ksyms[s]
+                        if code < 128:
+                            return "&#{};".format(code)
+                        if s in special_ksyms:
+                            return special_ksyms[s]
+                        return s
+
+                    ksym1 = to_utf_char(ksym1)
+                    ksym2 = to_utf_char(ksym2)
+
+                    def same_letter(s1, s2):
+                        if s1.startswith("&#"): s1 = chr(int(s1[2:-1]))
+                        if s2.startswith("&#"): s2 = chr(int(s2[2:-1]))
+                        if s1.capitalize() == s2:
+                            return True
+
+                    if not same_letter(ksym1, ksym2):
                         keys.append("""<text x="{}" y="{}" fill="white" stroke="black" stroke-width="{}" font-size="{}px">{}</text>""".
                                 format(xpos+key_w*0.3, ypos+key_h*0.85, key_w*0.01, key_w*0.4, ksym1))
                         keys.append("""<text x="{}" y="{}" fill="white" stroke="black" stroke-width="{}" font-size="{}px">{}</text>""".
                                 format(xpos+key_w*0.3, ypos+key_h*0.35, key_w*0.01, key_w*0.4, ksym2))
                     else:
-                        keys.append("""<text x="{}" y="{}" fill="white" stroke="black" stroke-width="{}" font-family="sans-serif" font-size="{}px">{}</text>""".
-                                format(xpos+key_w*0.35, ypos+key_h*0.6, key_w*0.02, key_w*0.4, ksym1.capitalize()))
+                        keys.append("""<text x="{}" y="{}" text-anchor="middle" fill="white" stroke="black" stroke-width="{}" font-family="sans-serif" font-size="{}px">{}</text>""".
+                                format(xpos+key_w*0.5, ypos+key_h*0.6, key_w*0.018, key_w*0.4, ksym2))
 
         svg_name = os.path.join(outldir, lt.name + ".svg")
         if debug:
@@ -94,4 +127,27 @@ def convert(debug, outdir, keydefs, layouts, partials):
         keys="\n".join(keys),
         ))
             f.write("</svg>")
+
+SPACE_RE = re.compile(r"[ \t]+")
+
+def read_keysymdefs(outdir):
+    gendir = os.path.dirname(outdir)
+    progdir = os.path.dirname(gendir)
+
+    fetchdir = os.path.join(progdir, "fetch")
+    keysym_h = os.path.join(fetchdir, "keysymdef.h")
+
+    with open(keysym_h, "r") as f:
+        while True:
+            lin = f.readline()
+            if not lin:
+                break
+            if not lin.startswith("#define"):
+                continue
+            words = re.split(SPACE_RE, lin)
+            symname = words[1]
+            symval = words[2]
+            kname = symname[3:]
+            ksym = int(symval, base=16)
+            ksyms[kname] = ksym
 
