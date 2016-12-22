@@ -243,10 +243,11 @@ COLON_COMMA_RE = re.compile(r"[ \t]*[,:][ \t]*")
 
 files_already_read = []
 
-def read_file(filename, as_partials=False):
+def read_file(filename, as_partials=False, referring_files=[]):
     global debug
 
-    print("Reading {}".format(filename))
+    print("Reading {} (as_partials={} refererring_files={})".format(
+            filename, as_partials, referring_files))
     filename_name = os.path.basename(filename)
 
     def syntax_error(msg):
@@ -287,6 +288,10 @@ def read_file(filename, as_partials=False):
 
     with open(filename, "r") as f:
         lines = f.readlines()
+
+    # prevent a file from including itself
+    files_already_read.append(os.path.basename(filename))
+
     cur_defs = None
     cur_level = 1
     for nl, l in enumerate(lines, 1):
@@ -301,8 +306,10 @@ def read_file(filename, as_partials=False):
                 expect_argc(1)
                 cur_defs = Keydefs(filename_name, args[0])
                 if as_partials:
+                    print(" In {}: Partial {}".format(filename, args[0]))
                     partials.append(cur_defs)
                 else:
+                    print(" In {}: Layout {}".format(filename, args[0]))
                     layouts.append(cur_defs)
             elif tok == "include":
                 expect_argc(1)
@@ -311,8 +318,7 @@ def read_file(filename, as_partials=False):
                 indir_file = os.path.join(indir, inc_filename)
                 cur_defs.includes.append(inc_arg)
                 if os.path.exists(indir_file) and inc_filename not in files_already_read:
-                    files_already_read.append(inc_filename)
-                    read_file(indir_file, True)
+                    read_file(indir_file, True, referring_files + [(filename, nl)])
             elif tok == "keytype":
                 expect_argc(1)
                 cur_defs.keys.append(["keytype", args[0]])

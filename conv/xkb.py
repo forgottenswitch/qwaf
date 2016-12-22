@@ -40,6 +40,30 @@ def collect_keys(keys):
         ret.append(s)
     return "\n".join(ret)
 
+class DestinationsForPartials:
+    def __init__(self, outdir):
+        self.outdir = outdir
+        self.fobjs = {}
+        self.files = {}
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, except_type, except_val, except_traceback):
+        self.close_all()
+        if except_type:
+            raise except_val
+
+    def add_file(self, src_file, dest_file):
+        dest_file = os.path.join(self.outdir, dest_file)
+        self.files[src_file] = dest_file
+        self.fobjs[src_file] = open(dest_file, "w")
+
+    def close_all(self):
+        for src_file in self.fobjs:
+            self.fobjs[src_file].close()
+        self.fobjs = {}
+
 def convert(debug, outdir, keydefs, layouts, partials):
     for x in ["symbols", "types", "compat"]:
         try:
@@ -47,8 +71,9 @@ def convert(debug, outdir, keydefs, layouts, partials):
         except FileExistsError:
             pass
 
+    # Output layout files (they only include partial files)
+    #
     filename_layouts = os.path.join(outdir, "symbols", "qwaf")
-
     with open(filename_layouts, "w") as f:
         for k in layouts:
             includes = collect_includes(k.includes)
@@ -63,27 +88,27 @@ xkb_symbols "{}" {{
                 print(xkb_symbols, end="")
             f.write(xkb_symbols)
 
-    filename_cyr = os.path.join(outdir, "symbols", "qwaf_cyr")
-    filename_lat = os.path.join(outdir, "symbols", "qwaf_lat")
-    filename_hjk = os.path.join(outdir, "symbols", "hjkl")
-    filename_lv3 = os.path.join(outdir, "symbols", "level3_hjkl")
-    filename_lv5 = os.path.join(outdir, "symbols", "level5_hjkl")
+    # Output partial files (the actual key assignments)
+    #
+    with DestinationsForPartials(outdir) as dest:
+        dest.add_file("letters_lat", "symbols/qwaf_lat")
+        dest.add_file("letters_cyr", "symbols/qwaf_cyr")
+        dest.add_file("hjkl", "symbols/hjkl")
+        dest.add_file("level3_hjkl", "symbols/level3_hjkl")
+        dest.add_file("level5_hjkl", "symbols/level5_hjkl")
 
-    CYR_RE = re.compile("^letters_cyr")
-    LAT_RE = re.compile("^letters_lat")
-
-    with open(filename_cyr, "w") as f_cyr, \
-            open(filename_lat, "w") as f_lat, \
-            open(filename_hjk, "w") as f_hjk, \
-            open(filename_lv3, "w") as f_lv3, \
-            open(filename_lv5, "w") as f_lv5:
         for k in partials:
             k_base_filename = os.path.basename(k.filename)
+            if debug:
+                print("Converting partial: {}".format(k))
+            dest_fobj = dest.fobjs[k_base_filename]
+            dest_file = dest.files[k_base_filename]
 
             includes = collect_includes(k.includes)
             includes_nl = "\n"
             if len(includes) == 0:
                 includes_nl = ""
+
             keys = collect_keys(k.keys)
             xkb_symbols = """partial alphanumeric_keys modifier_keys
 xkb_symbols "{}" {{
@@ -91,18 +116,9 @@ xkb_symbols "{}" {{
 }};
 
 """.format(k.name, includes, includes_nl, keys)
-            if re.match(LAT_RE, k_base_filename):
-                filename_out, f_out = filename_lat, f_lat
-            elif re.match(CYR_RE, k_base_filename):
-                filename_out, f_out = filename_cyr, f_cyr
-            elif k_base_filename == "level3_hjkl":
-                filename_out, f_out = filename_lv3, f_lv3
-            elif k_base_filename == "level5_hjkl":
-                filename_out, f_out = filename_lv5, f_lv5
-            else:
-                filename_out, f_out = filename_hjk, f_hjk
+
             if debug:
-                print("Into {} (from {}):".format(filename_out, k_base_filename))
+                print("Into {} (from {}):".format(dest_file, k.filename))
                 print(xkb_symbols, end="")
-            f_out.write(xkb_symbols)
+            dest_fobj.write(xkb_symbols)
 

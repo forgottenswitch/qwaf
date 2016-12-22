@@ -22,10 +22,10 @@ make
 
 Or assemble an `.xkb` file (like `examples/qwaf_hjkl.xkb`), and run:
 ```sh
-xkbcomp -I"/path/to/qwaf/gen/xkb" /path/to/xkb/file $DISPLAY
+xkbcomp -I"/path/to/qwaf"/gen/xkb /path/to/xkb/file $DISPLAY
 ```
 
-To install QWAF [for current user], put the above in a file, like `~/xkb.sh`
+To install [for current user], put the above in a file, like `~/xkb.sh`
 and add the `sh ~/xkb.sh` to autostart
 (by putting this into `~/.xinitrc`, or tweaking desktop settings).
 
@@ -36,4 +36,4 @@ The workaround is active by default, but has problems under Xserver 1.18.1 - 1.1
 To disable it in custom `.xkb` file, add `hjkl(lv5)` to `xkb_symbols`.
 
 As the `xkbcomp` cannot distinguish between system and non-system includes,
-all files under `xkb/` have "odd"/unique names.
+all generated xkb files under have nonstandard names.
