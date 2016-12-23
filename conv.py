@@ -8,6 +8,14 @@ import copy
 
 import conv.xkb
 import conv.svg
+import conv.linux_console
+from conv.utils import int_to_base
+
+conv_to_perform = [
+    conv.xkb,
+    conv.svg,
+    conv.linux_console
+    ]
 
 def usage():
     print("Usage: conv.py [-o OUTPUT_DIR] [-g] INPUT_FILE")
@@ -60,19 +68,18 @@ def fatal(msg):
     print(msg)
     sys.exit(1)
 
-keydefs = {}
+symname_defs = {}
 
-SPACE_RE = re.compile(r"[ \t]+")
-DEFINE_RE = re.compile(r"^[ \t]*#define[ \t]")
 
-def read_keydefs_file(filename):
+def read_symname_defs_file(filename):
+    word_split_re = re.compile(r"[ \t()]+")
     with open(filename, "r") as f:
         while True:
             lin = f.readline()
             if not lin: break
             if not lin.startswith("#define"):
                 continue
-            words = re.split(SPACE_RE, lin)
+            words = re.split(word_split_re, lin)
 
             symname = words[1]
             symval = words[2]
@@ -94,13 +101,13 @@ def read_keydefs_file(filename):
                     continue
 
             #print([kname, ksym])
-            ksyms[kname] = ksym
+            symname_defs[kname] = ksym
     return
 
-read_keydefs_file("fetch/keysymdef.h")
+read_symname_defs_file("fetch/keysymdef.h")
 
 if debug:
-    pprint.pprint(keydefs)
+    pprint.pprint(symname_defs)
 
 if not os.path.exists(infile):
     fatal("INPUT_FILE must exist")
@@ -139,6 +146,7 @@ class Keydefs:
         self.already_merged = []
         self.compiled = False
         self.compiled_keys = []
+        self.latin = not re.match("^ru($|_)", name)
 
     def xkbname(self):
         if self.name:
@@ -149,11 +157,12 @@ class Keydefs:
         keys = ""
         for k in self.keys:
             keys += "    {}\n".format(k)
-        return """Keydefs<{} ({}) includes={}\n  keys=[\n{}  ]>""".format(
+        return """Keydefs<{} ({}) includes={}\n  keys=[\n{}  ] latin={}>""".format(
                 repr(self.filename),
                 repr(self.name),
                 self.includes,
-                keys)
+                keys,
+                self.latin)
 
     def __repr__(self):
         return self.__str__()
@@ -193,7 +202,12 @@ class Keydefs:
             if not merged:
                 self.compiled_keys.append(copy.deepcopy(key))
 
-def keys_to_defs(filename, name, keys):
+    def get_keysym(self, keycode, level):
+        for directive in self.compiled_keys:
+            if directive[0] == "key" and directive[1] == keycode:
+                return directive[2][level-1]
+
+def keys_to_defs(filename, name, keys, additional_directives):
     kd = Keydefs(filename, name)
     kd_keys = []
 
@@ -219,33 +233,12 @@ def keys_to_defs(filename, name, keys):
         else:
             process_keydef(kn, keys[kn])
     kd.merge_keys(kd.xkbname(), kd_keys)
+    kd.merge_keys(kd.xkbname(), additional_directives)
     kd.compiled = True
     if debug:
         print(kd_keys)
         print("Compiled keys {}:\n".format(kd.xkbname(), kd.compiled_keys))
     return kd
-
-def hex_digit(x):
-    u = 0
-    if x < 10:
-        u = ord("0") + int(x)
-    elif x < 16:
-        u = ord("a") + int(x - 10)
-    return chr(u)
-
-def int_to_base(n, base):
-    divisor = 1
-    while divisor < n:
-        divisor *= base
-
-    digits = []
-    while n > base:
-        divisor /= base
-        d, n = divmod(n, divisor)
-        digits.append(hex_digit(int(d)))
-    digits.append(hex_digit(int(n)))
-
-    return "".join(digits)
 
 standard_keydefs.append(keys_to_defs("us", "", {
     "AE": [ ["1","!"], ["2","@"], ["3","#"], ["4","$"], ["5","%"], ["6","^"], ["7","&"], ["8","*"], ["9","("], ["0",")"], ["-","_"], ["=","+"] ],
@@ -254,7 +247,11 @@ standard_keydefs.append(keys_to_defs("us", "", {
     "AB": [ "Z", "X", "C", "V", "B", "N", "M", [",","<"], [".",">"], ["/","?"] ],
     "TLDE": ["`","~"],
     "BKSL": ["\\","|"],
-    }))
+    },
+    [
+        ["key", "TAB",  ["Tab",   "ISO_Left_Tab", None, None, None, None, None, None]],
+        ["key", "SPCE", ["space", "space",        None, None, None, None, None, None]],
+    ]))
 
 COMMA_RE = re.compile(r"[ \t]*,[ \t]*")
 COLON_COMMA_RE = re.compile(r"[ \t]*[,:][ \t]*")
@@ -380,7 +377,7 @@ if debug:
 if not os.path.exists(outdir):
     os.mkdir(outdir)
 
-for outm in [conv.xkb, conv.svg]:
+for outm in conv_to_perform:
     outmdir = os.path.join(outdir, outm.name)
     addmdir = os.path.join(adddir, outm.name)
 
@@ -399,5 +396,5 @@ for outm in [conv.xkb, conv.svg]:
     print("Converting as {} into {}".format(outm.name, outmdir))
     if not os.path.exists(outmdir):
         os.mkdir(outmdir)
-    outm.convert(debug, outmdir, keydefs, layouts, partials)
+    outm.convert(debug, outmdir, symname_defs, layouts, partials)
 

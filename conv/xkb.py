@@ -64,7 +64,7 @@ class DestinationsForPartials:
             self.fobjs[src_file].close()
         self.fobjs = {}
 
-def convert(debug, outdir, keydefs, layouts, partials):
+def convert(debug, outdir, symname_defs, layouts, partials):
     for x in ["symbols", "types", "compat"]:
         try:
             os.mkdir(os.path.join(outdir, x))

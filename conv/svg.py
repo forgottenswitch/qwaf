@@ -9,7 +9,7 @@ special_ksyms = {
     "ISO_Level3_Latch": "Lv3",
 }
 
-def convert(debug, outdir, keydefs, layouts, partials):
+def convert(debug, outdir, symname_defs, layouts, partials):
     outldir = os.path.join(outdir, "layouts")
     outpdir = os.path.join(outdir, "partials")
 
@@ -84,11 +84,11 @@ def convert(debug, outdir, keydefs, layouts, partials):
                             return
                         if s in special_ksyms:
                             return special_ksyms[s]
-                        if s not in keydefs:
+                        if s not in symname_defs:
                             if s.startswith("U"):
                                 code = int(s[1:], base=16)
                         else:
-                            code = keydefs.get(s)
+                            code = symname_defs.get(s)
                         if code:
                             return "&#{};".format(code)
                         return s

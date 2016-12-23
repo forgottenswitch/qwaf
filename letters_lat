@@ -1,6 +1,8 @@
 # vim: sw=2
 
 symbols "us"
+  include "us"
+
   level 1
 
   key TLDE: grave, asciitilde

@@ -134,7 +134,6 @@ symbols "lv1"
   level 1
 
   key AC11: comma, colon
-  key SPCE: NoSymbol, space
 
 symbols "swap_menu_rwin"
   level 1
