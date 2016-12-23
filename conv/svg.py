@@ -4,16 +4,12 @@ import sys
 
 name = "svg"
 
-ksyms = {}
-
 special_ksyms = {
     "ISO_Level5_Shift": "Lv5",
     "ISO_Level3_Latch": "Lv3",
 }
 
 def convert(debug, outdir, keydefs, layouts, partials):
-    read_keysymdefs(outdir)
-
     outldir = os.path.join(outdir, "layouts")
     outpdir = os.path.join(outdir, "partials")
 
@@ -88,11 +84,11 @@ def convert(debug, outdir, keydefs, layouts, partials):
                             return
                         if s in special_ksyms:
                             return special_ksyms[s]
-                        if s not in ksyms:
+                        if s not in keydefs:
                             if s.startswith("U"):
                                 code = int(s[1:], base=16)
                         else:
-                            code = ksyms.get(s)
+                            code = keydefs.get(s)
                         if code:
                             return "&#{};".format(code)
                         return s
@@ -132,42 +128,3 @@ def convert(debug, outdir, keydefs, layouts, partials):
             f.write("</svg>")
 
 SPACE_RE = re.compile(r"[ \t]+")
-
-def read_keysymdefs(outdir):
-    gendir = os.path.dirname(outdir)
-    progdir = os.path.dirname(gendir)
-
-    fetchdir = os.path.join(progdir, "fetch")
-    keysym_h = os.path.join(fetchdir, "keysymdef.h")
-
-    with open(keysym_h, "r") as f:
-        while True:
-            lin = f.readline()
-            if not lin:
-                break
-            if not lin.startswith("#define"):
-                continue
-            words = re.split(SPACE_RE, lin)
-
-            symname = words[1]
-            symval = words[2]
-            for word in words:
-                if word.startswith("U+"):
-                    symval = word
-                    break
-
-            kname = symname[3:]
-            #print([kname, symval])
-
-            if symval.startswith("U+"):
-                ksym = int(symval[2:], base=16)
-            else:
-                ksym = int(symval, base=16)
-                if ksym > 0x10000000:
-                    ksym -= 0x10000000
-                else:
-                    continue
-
-            #print([kname, ksym])
-            ksyms[kname] = ksym
-

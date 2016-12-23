@@ -67,17 +67,35 @@ DEFINE_RE = re.compile(r"^[ \t]*#define[ \t]")
 
 def read_keydefs_file(filename):
     with open(filename, "r") as f:
-        lines = f.readlines()
-    for l in lines:
-        if re.match(DEFINE_RE, l):
-            components = re.split(SPACE_RE, l)
-            symname = components[1][3:]
-            symcode = int(components[2], base=16)
-            if symcode < 0x100:
-                keydefs[symname] = symcode
-            if symcode >= 0x01000100 and symcode <= 0x0110ffff:
-                utfcode = symcode - 0x01000000
-                keydefs[symname] = utfcode
+        while True:
+            lin = f.readline()
+            if not lin: break
+            if not lin.startswith("#define"):
+                continue
+            words = re.split(SPACE_RE, lin)
+
+            symname = words[1]
+            symval = words[2]
+            for word in words:
+                if word.startswith("U+"):
+                    symval = word
+                    break
+
+            kname = symname[3:]
+            #print([kname, symval])
+
+            if symval.startswith("U+"):
+                ksym = int(symval[2:], base=16)
+            else:
+                ksym = int(symval, base=16)
+                if ksym > 0x10000000:
+                    ksym -= 0x10000000
+                else:
+                    continue
+
+            #print([kname, ksym])
+            ksyms[kname] = ksym
+    return
 
 read_keydefs_file("fetch/keysymdef.h")
 
