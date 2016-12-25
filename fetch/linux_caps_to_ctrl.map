@@ -1,0 +1,9 @@
+keycode  58 = Control
+	shift           keycode  58 = Control
+	control         keycode  58 = Control
+	shift   control keycode  58 = Control
+	altgr   control keycode  58 = Control
+	alt             keycode  58 = Control
+	shift   alt     keycode  58 = Control
+	control alt     keycode  58 = Control
+

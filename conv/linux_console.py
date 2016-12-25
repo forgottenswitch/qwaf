@@ -192,7 +192,8 @@ def add_undefined_keycodes_to_second_group(dest_fobj, outdir, keycodes_defined):
                 for l in lines:
                     if not re.search(nul_re, l):
                         nonempty = True
-                if nonempty and kcode:
+                if nonempty and kcode \
+                        and len(lines) and not lines[0].endswith("Caps_Lock\n"):
                     DefaultKeycodes[str(kcode)] = lines
             for l in f.readlines():
                 try: l = l.decode("UTF-8")
@@ -218,6 +219,19 @@ def add_undefined_keycodes_to_second_group(dest_fobj, outdir, keycodes_defined):
                 dest_fobj.write(GroupModifier)
                 dest_fobj.write(" ")
                 dest_fobj.write(l)
+    caps_to_ctrl_map_filename = os.path.join(outdir, "../../fetch/linux_caps_to_ctrl.map")
+    with open(caps_to_ctrl_map_filename, "r") as f:
+        lines = []
+        for l in f.readlines():
+            l = l.rstrip()
+            if len(l):
+                lines.append(l)
+        dest_fobj.write("\n")
+        for l in lines:
+            dest_fobj.write(l + "\n")
+        dest_fobj.write("\n")
+        for l in lines:
+            dest_fobj.write(GroupModifier + " " + l + "\n")
 
 def dual_layout(kl1, kl2, outdir, out_filename):
     out_filename = os.path.join(outdir, out_filename)
