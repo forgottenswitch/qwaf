@@ -175,17 +175,63 @@ def is_latin_letter(s):
     if len(s) != 1: return False
     return (s >= 'a' and s <= 'z') or (s >= 'A' and s <= 'Z')
 
+DefaultKeycodes = None
+
+def add_undefined_keycodes_to_second_group(dest_fobj, outdir, keycodes_defined):
+    global DefaultKeycodes
+    if not DefaultKeycodes:
+        DefaultKeycodes = {}
+        spaces_re = r"[ \t]+"
+        default_map_filename = os.path.join(outdir, "../../fetch/linux_default.map")
+        kcode, lines = None, []
+        nul_re = "[ \t]nul[ \t]*$"
+        with open(default_map_filename, "rb") as f:
+            def push_kcode():
+                nonlocal kcode, lines
+                nonempty = False
+                for l in lines:
+                    if not re.search(nul_re, l):
+                        nonempty = True
+                if nonempty and kcode:
+                    DefaultKeycodes[str(kcode)] = lines
+            for l in f.readlines():
+                try: l = l.decode("UTF-8")
+                except Exception as e: continue
+                if l.startswith("keycode"):
+                    if kcode: push_kcode()
+                    words = re.split(spaces_re, l)
+                    kcode = words[1]
+                    ksym1, ksym2 = words[3], words[4]
+                    lines = [ "keycode {} = {}\n".format(kcode, ksym1),
+                              "\tshift keycode {} = {}\n".format(kcode, ksym2) ]
+                elif l.startswith("string") or l.startswith("compose"):
+                    break
+                else:
+                    lines.append(l)
+            if kcode: push_kcode()
+    for kcode_str in DefaultKeycodes:
+        kcode = int(kcode_str)
+        if kcode not in keycodes_defined:
+            lines = DefaultKeycodes[kcode_str]
+            dest_fobj.write("\n");
+            for l in lines:
+                dest_fobj.write(GroupModifier)
+                dest_fobj.write(" ")
+                dest_fobj.write(l)
+
 def dual_layout(kl1, kl2, outdir, out_filename):
     out_filename = os.path.join(outdir, out_filename)
+    keycodes_defined = []
     with open(out_filename, "w") as dest_fobj:
         dest_fobj.write('include "linux-keys-bare.inc"\n\n')
-        one_layout(kl1, None, dest_fobj, kl2)
+        one_layout(kl1, None, dest_fobj, kl2, keycodes_defined)
         if kl2:
             dest_fobj.write('\n')
-            one_layout(kl2, kl1, dest_fobj, kl2)
+            one_layout(kl2, kl1, dest_fobj, kl2, keycodes_defined)
+        add_undefined_keycodes_to_second_group(dest_fobj, outdir, keycodes_defined)
     return
 
-def one_layout(kl, kl_qwerty, dest_fobj, dual):
+def one_layout(kl, kl_qwerty, dest_fobj, dual, keycodes_defined):
     for k in kl.compiled_keys:
         directive, *args = k
         if directive == "key":
@@ -213,6 +259,7 @@ def one_layout(kl, kl_qwerty, dest_fobj, dual):
                         linux_kcode = Keycodes[prefix+"01"] + n-1
                     else:
                         raise Exception("Unable to translate keycode '{}'".format(keycode))
+                keycodes_defined.append(linux_kcode)
 
                 for lv, ksym in enumerate(keysyms, 1):
                     if not ksym: ksym = "NoSymbol"
