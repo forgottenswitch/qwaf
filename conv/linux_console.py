@@ -305,6 +305,8 @@ def one_layout(kl, kl_qwerty, dest_fobj, dual, keycodes_defined):
                                 if SymnameDefs[symname] == ksym_code:
                                     if symname in UnknownSymnames:
                                         ksym = "U+" + ksym_code_hex
+                                    elif chr(ksym_code) in Digits:
+                                        ksym = Digits[chr(ksym_code)]
                                     else:
                                         ksym = symname
                         else:
