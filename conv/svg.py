@@ -73,7 +73,8 @@ def convert(debug, outdir, symname_defs, layouts, partials):
                         xpos = int(key_w * tilde_mul + (key_b + key_w) * (column-1) + key_b * 2)
                         ypos = int(key_b)
 
-                    keys.append("""<rect x="{}" y="{}" width="{}" height="{}" fill="#E9B96E" />""".format(xpos, ypos, key_w, key_h))
+                    keys.append("""<rect x="{}" y="{}" width="{}" height="{}" rx="{}" ry="{}" fill="white" stroke="black" stroke-width="{}"/>""".format(
+                        xpos, ypos, key_w, key_h, key_w*0.1, key_h*0.1, key_w*0.01))
 
                     ksym1 = str(keysyms[0])
                     ksym2 = str(keysyms[1])
@@ -103,13 +104,13 @@ def convert(debug, outdir, symname_defs, layouts, partials):
                             return True
 
                     if not same_letter(ksym1, ksym2):
-                        keys.append("""<text x="{}" y="{}" fill="white" stroke="black" stroke-width="{}" font-size="{}px">{}</text>""".
-                                format(xpos+key_w*0.3, ypos+key_h*0.85, key_w*0.01, key_w*0.4, ksym1))
-                        keys.append("""<text x="{}" y="{}" fill="white" stroke="black" stroke-width="{}" font-size="{}px">{}</text>""".
-                                format(xpos+key_w*0.3, ypos+key_h*0.35, key_w*0.01, key_w*0.4, ksym2))
+                        keys.append("""<text x="{}" y="{}" fill="black" font-size="{}px">{}</text>""".
+                                format(xpos+key_w*0.3, ypos+key_h*0.85, key_w*0.4, ksym1))
+                        keys.append("""<text x="{}" y="{}" fill="black" font-size="{}px">{}</text>""".
+                                format(xpos+key_w*0.3, ypos+key_h*0.35, key_w*0.4, ksym2))
                     else:
-                        keys.append("""<text x="{}" y="{}" text-anchor="middle" fill="white" stroke="black" stroke-width="{}" font-family="sans-serif" font-size="{}px">{}</text>""".
-                                format(xpos+key_w*0.5, ypos+key_h*0.6, key_w*0.018, key_w*0.4, ksym2))
+                        keys.append("""<text x="{}" y="{}" text-anchor="middle" fill="black" font-size="{}px">{}</text>""".
+                                format(xpos+key_w*0.5, ypos+key_h*0.6, key_w*0.4, ksym2))
 
         svg_name = os.path.join(outldir, lt.name + ".svg")
         if debug:
@@ -118,7 +119,7 @@ def convert(debug, outdir, symname_defs, layouts, partials):
         with open(svg_name, "w") as f:
             f.write("""
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1">
-    <rect x="0" y="0" width="{kbd_w}" height="{kbd_h}" fill="gray" />
+    <rect x="0" y="0" width="{kbd_w}" height="{kbd_h}" fill="white" />
     {keys}
 """.format(
         kbd_w=(key_w*15+key_b*16),
