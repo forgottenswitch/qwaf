@@ -29,8 +29,8 @@ def convert(debug, outdir, symname_defs, layouts, partials):
             pass
 
     for lt in layouts:
-        keys = []
-        hands_dividing_line(keys)
+        svg_ops = []
+        hands_dividing_line(svg_ops)
 
         for k in lt.compiled_keys:
             directive, *args = k
@@ -60,7 +60,7 @@ def convert(debug, outdir, symname_defs, layouts, partials):
                         xpos = int(key_w * tilde_mul + (key_b + key_w) * (column-1) + key_b * 2)
                         ypos = int(key_b)
 
-                    keys.append("""<rect x="{}" y="{}" width="{}" height="{}" rx="{}" ry="{}" fill="white" stroke="black" stroke-width="{}"/>""".format(
+                    svg_ops.append("""<rect x="{}" y="{}" width="{}" height="{}" rx="{}" ry="{}" fill="white" stroke="black" stroke-width="{}"/>""".format(
                         xpos, ypos, key_w, key_h, key_w*0.1, key_h*0.1, key_w*0.01))
 
                     ksym1 = str(keysyms[0])
@@ -91,12 +91,12 @@ def convert(debug, outdir, symname_defs, layouts, partials):
                             return True
 
                     if not same_letter(ksym1, ksym2):
-                        keys.append("""<text x="{}" y="{}" fill="black" font-size="{}px">{}</text>""".
+                        svg_ops.append("""<text x="{}" y="{}" fill="black" font-size="{}px">{}</text>""".
                                 format(xpos+key_w*0.3, ypos+key_h*0.85, key_w*0.4, ksym1))
-                        keys.append("""<text x="{}" y="{}" fill="black" font-size="{}px">{}</text>""".
+                        svg_ops.append("""<text x="{}" y="{}" fill="black" font-size="{}px">{}</text>""".
                                 format(xpos+key_w*0.3, ypos+key_h*0.35, key_w*0.4, ksym2))
                     else:
-                        keys.append("""<text x="{}" y="{}" text-anchor="middle" fill="black" font-size="{}px">{}</text>""".
+                        svg_ops.append("""<text x="{}" y="{}" text-anchor="middle" fill="black" font-size="{}px">{}</text>""".
                                 format(xpos+key_w*0.5, ypos+key_h*0.6, key_w*0.4, ksym2))
 
         svg_name = os.path.join(outldir, lt.name + ".svg")
@@ -107,17 +107,16 @@ def convert(debug, outdir, symname_defs, layouts, partials):
             f.write("""
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1">
     <rect x="0" y="0" width="{kbd_w}" height="{kbd_h}" fill="white" />
-    {keys}
-""".format(
+{svg_ops}
+</svg>""".format(
         kbd_w=(key_w*15+key_b*16),
         kbd_h=(key_h*5+key_b*6),
-        keys="\n".join(keys),
+        svg_ops="\n".join(svg_ops),
         ))
-            f.write("</svg>")
 
 SPACE_RE = re.compile(r"[ \t]+")
 
-def hands_dividing_line(svg_lines):
+def hands_dividing_line(svg_ops):
     muls = [tilde_mul, tab_mul, caps_mul, lshift_mul]
     for row, mul in enumerate(muls):
         xpos1 = key_b + key_w * mul + (key_b + key_w) * 5 + key_b * 0.5
@@ -127,11 +126,11 @@ def hands_dividing_line(svg_lines):
             xpos2 = None
         ypos1 = (key_b + key_h) * row + key_b*0.5
         ypos2 = ypos1 + key_h + key_b
-        svg_lines.append('<line x1="{}" y1="{}" x2="{}" y2="{}"'
-                         ' stroke="black" stroke-width="{}"'
-                         ' />'.format(xpos1, ypos1, xpos1, ypos2, key_b*0.1))
+        svg_ops.append('<line x1="{}" y1="{}" x2="{}" y2="{}"'
+                       ' stroke="black" stroke-width="{}"'
+                       ' />'.format(xpos1, ypos1, xpos1, ypos2, key_b*0.1))
         if xpos2:
-            svg_lines.append('<line x1="{}" y1="{}" x2="{}" y2="{}"'
-                             ' stroke="black" stroke-width="{}"'
-                             ' />'.format(xpos1, ypos2, xpos2, ypos2, key_b*0.1))
+            svg_ops.append('<line x1="{}" y1="{}" x2="{}" y2="{}"'
+                           ' stroke="black" stroke-width="{}"'
+                           ' />'.format(xpos1, ypos2, xpos2, ypos2, key_b*0.1))
 
