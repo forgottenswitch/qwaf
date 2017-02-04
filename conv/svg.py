@@ -9,6 +9,15 @@ special_ksyms = {
     "ISO_Level3_Latch": "Lv3",
 }
 
+key_w = 100
+key_h = key_w
+key_b = 20
+
+tilde_mul = 1.0
+tab_mul = 1.5
+caps_mul = 1.8
+lshift_mul = 2.4
+
 def convert(debug, outdir, symname_defs, layouts, partials):
     outldir = os.path.join(outdir, "layouts")
     outpdir = os.path.join(outdir, "partials")
@@ -19,31 +28,9 @@ def convert(debug, outdir, symname_defs, layouts, partials):
         except FileExistsError:
             pass
 
-    key_w = 100
-    key_h = key_w
-    key_b = 20
-
-    tilde_mul = 1.0
-    tab_mul = 1.5
-    caps_mul = 1.8
-    lshift_mul = 2.4
-
     for lt in layouts:
         keys = []
-
-        # r/l side dividing line
-        muls = [tilde_mul, tab_mul, caps_mul, lshift_mul]
-        for row, mul in enumerate(muls):
-            xpos1 = key_b + key_w * mul + (key_b + key_w) * 5 + key_b * 0.5
-            try:
-                xpos2 = xpos1 + key_w * (muls[row+1] - mul)
-            except:
-                xpos2 = None
-            ypos1 = (key_b + key_h) * row + key_b*0.5
-            ypos2 = ypos1 + key_h + key_b
-            keys.append("""<line x1="{}" y1="{}" x2="{}" y2="{}" stroke="black" stroke-width="{}" />""".format(xpos1, ypos1, xpos1, ypos2, key_b*0.1 ))
-            if xpos2:
-                keys.append("""<line x1="{}" y1="{}" x2="{}" y2="{}" stroke="black" stroke-width="{}" />""".format(xpos1, ypos2, xpos2, ypos2, key_b*0.1 ))
+        hands_dividing_line(keys)
 
         for k in lt.compiled_keys:
             directive, *args = k
@@ -129,3 +116,22 @@ def convert(debug, outdir, symname_defs, layouts, partials):
             f.write("</svg>")
 
 SPACE_RE = re.compile(r"[ \t]+")
+
+def hands_dividing_line(svg_lines):
+    muls = [tilde_mul, tab_mul, caps_mul, lshift_mul]
+    for row, mul in enumerate(muls):
+        xpos1 = key_b + key_w * mul + (key_b + key_w) * 5 + key_b * 0.5
+        try:
+            xpos2 = xpos1 + key_w * (muls[row+1] - mul)
+        except:
+            xpos2 = None
+        ypos1 = (key_b + key_h) * row + key_b*0.5
+        ypos2 = ypos1 + key_h + key_b
+        svg_lines.append('<line x1="{}" y1="{}" x2="{}" y2="{}"'
+                         ' stroke="black" stroke-width="{}"'
+                         ' />'.format(xpos1, ypos1, xpos1, ypos2, key_b*0.1))
+        if xpos2:
+            svg_lines.append('<line x1="{}" y1="{}" x2="{}" y2="{}"'
+                             ' stroke="black" stroke-width="{}"'
+                             ' />'.format(xpos1, ypos2, xpos2, ypos2, key_b*0.1))
+
