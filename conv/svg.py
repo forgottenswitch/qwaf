@@ -36,7 +36,9 @@ def convert(debug, outdir, symname_defs, layouts, partials):
             directive, *args = k
             if directive == "key":
                 kcode, ksyms = args
-                output_key(svg_ops, kcode, ksyms, symname_defs, debug)
+                ksym1 = str(ksyms[0])
+                ksym2 = str(ksyms[1])
+                output_key(svg_ops, kcode, ksym1, ksym2, symname_defs, debug)
 
         svg_name = os.path.join(outldir, lt.name + ".svg")
         if debug:
@@ -52,7 +54,7 @@ def convert(debug, outdir, symname_defs, layouts, partials):
                         svg_ops="\n".join(svg_ops)
                         ))
 
-def output_key(svg_ops, keycode, keysyms, symname_defs, debug):
+def output_key(svg_ops, keycode, keysym1, keysym2, symname_defs, debug):
     if debug:
         print(["svg: lkey", lt.name, keycode, keysyms])
 
@@ -80,9 +82,6 @@ def output_key(svg_ops, keycode, keysyms, symname_defs, debug):
                        ' rx="{}" ry="{}" fill="white" stroke="black" stroke-width="{}"'
                        ' />'.format(xpos, ypos, key_w, key_h, key_w*0.1, key_h*0.1, key_w*0.01))
 
-        ksym1 = str(keysyms[0])
-        ksym2 = str(keysyms[1])
-
         def to_utf_char(s):
             code = None
             if s is None:
@@ -98,8 +97,8 @@ def output_key(svg_ops, keycode, keysyms, symname_defs, debug):
                 return "&#{};".format(code)
             return s
 
-        ksym1 = to_utf_char(ksym1)
-        ksym2 = to_utf_char(ksym2)
+        ksym1 = to_utf_char(keysym1)
+        ksym2 = to_utf_char(keysym2)
 
         def same_letter(s1, s2):
             if s1.startswith("&#"): s1 = chr(int(s1[2:-1]))
