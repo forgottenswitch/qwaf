@@ -39,7 +39,7 @@ def convert(debug, outdir, symname_defs, layouts, partials):
                     kcode, ksyms = args
                     ksym1 = str(ksyms[base_lv-1])
                     ksym2 = str(ksyms[base_lv])
-                    output_key(svg_ops, kcode, ksym1, ksym2, symname_defs, debug)
+                    output_key(svg_ops, kcode, ksym1, ksym2, symname_defs, lt, debug)
 
             svg_filename = lt.name
             if base_lv != 1:
@@ -58,9 +58,9 @@ def convert(debug, outdir, symname_defs, layouts, partials):
                             svg_ops="\n".join(svg_ops)
                             ))
 
-def output_key(svg_ops, keycode, keysym1, keysym2, symname_defs, debug):
+def output_key(svg_ops, keycode, keysym1, keysym2, symname_defs, lt, debug):
     if debug:
-        print(["svg: lkey", lt.name, keycode, keysyms])
+        print(["svg: lkey", lt.name, keycode, keysym1, keysym2])
 
     if keycode[:2] in ["AB", "AC", "AD", "AE"] or keycode in ["TLDE", "BKSL"]:
         if keycode == "TLDE":
