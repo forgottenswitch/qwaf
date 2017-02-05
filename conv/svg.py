@@ -29,30 +29,34 @@ def convert(debug, outdir, symname_defs, layouts, partials):
             pass
 
     for lt in layouts:
-        svg_ops = []
-        hands_dividing_line(svg_ops)
+        for base_lv in [1, 3, 5]:
+            svg_ops = []
+            hands_dividing_line(svg_ops)
 
-        for k in lt.compiled_keys:
-            directive, *args = k
-            if directive == "key":
-                kcode, ksyms = args
-                ksym1 = str(ksyms[0])
-                ksym2 = str(ksyms[1])
-                output_key(svg_ops, kcode, ksym1, ksym2, symname_defs, debug)
+            for k in lt.compiled_keys:
+                directive, *args = k
+                if directive == "key":
+                    kcode, ksyms = args
+                    ksym1 = str(ksyms[base_lv-1])
+                    ksym2 = str(ksyms[base_lv])
+                    output_key(svg_ops, kcode, ksym1, ksym2, symname_defs, debug)
 
-        svg_name = os.path.join(outldir, lt.name + ".svg")
-        if debug:
-            print("'{}({})' into '{}'".format(lt.filename, lt.name, svg_name))
+            svg_filename = lt.name
+            if base_lv != 1:
+                svg_filename += "-lv{}".format(base_lv)
+            svg_name = os.path.join(outldir, svg_filename + ".svg")
+            if debug:
+                print("'{}({})' into '{}'".format(lt.filename, lt.name, svg_name))
 
-        with open(svg_name, "w") as f:
-            f.write('<svg xmlns="http://www.w3.org/2000/svg" version="1.1">\n'
-                    '    <rect x="0" y="0" width="{kbd_w}" height="{kbd_h}" fill="white" />\n'
-                    '{svg_ops}\n'
-                    '</svg>'.format(
-                        kbd_w=(key_w*15+key_b*16),
-                        kbd_h=(key_h*5+key_b*6),
-                        svg_ops="\n".join(svg_ops)
-                        ))
+            with open(svg_name, "w") as f:
+                f.write('<svg xmlns="http://www.w3.org/2000/svg" version="1.1">\n'
+                        '    <rect x="0" y="0" width="{kbd_w}" height="{kbd_h}" fill="white" />\n'
+                        '{svg_ops}\n'
+                        '</svg>'.format(
+                            kbd_w=(key_w*15+key_b*16),
+                            kbd_h=(key_h*5+key_b*6),
+                            svg_ops="\n".join(svg_ops)
+                            ))
 
 def output_key(svg_ops, keycode, keysym1, keysym2, symname_defs, debug):
     if debug:
