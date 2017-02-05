@@ -110,17 +110,42 @@ def output_key(svg_ops, keycode, keysym1, keysym2, symname_defs, lt, debug):
             if s1.capitalize() == s2:
                 return True
 
+        class label:
+            def __init__(self, ksym, ypos_offset):
+                self.font_size = key_w * 0.4
+                self.font_style = "normal"
+                self.ksym = ksym
+                self.xpos = xpos + key_w*0.3
+                self.ypos = ypos + key_h*(0.35 + ypos_offset)
+                if self.ksym.startswith("dead_"):
+                    self.ksym = self.ksym[5:]
+                    self.font_size *= 0.7
+                    self.font_style = "italic"
+                    self.xpos = xpos + key_w*0.05
+                return
+
         if not same_letter(ksym1, ksym2):
-            svg_ops.append('<text x="{}" y="{}" fill="black" font-size="{}px"'
-                           ' >{}</text>'.format(xpos+key_w*0.3, ypos+key_h*0.85, key_w*0.4,
-                               ksym1))
-            svg_ops.append('<text x="{}" y="{}" fill="black" font-size="{}px"'
-                           ' >{}</text>'.format(xpos+key_w*0.3, ypos+key_h*0.35, key_w*0.4,
-                               ksym2))
+            lb1 = label(ksym1, 0.5)
+            lb2 = label(ksym2, 0)
+            svg_ops.append('<text x="{}" y="{}" fill="black"'
+                           ' font-size="{}px" font-style="{}"'
+                           ' >{}</text>'.format(
+                               lb1.xpos, lb1.ypos,
+                               lb1.font_size, lb1.font_style,
+                               lb1.ksym))
+            svg_ops.append('<text x="{}" y="{}" fill="black"'
+                           ' font-size="{}px" font-style="{}"'
+                           ' >{}</text>'.format(
+                               lb2.xpos, lb2.ypos,
+                               lb2.font_size, lb2.font_style,
+                               lb2.ksym))
         else:
-            svg_ops.append('<text x="{}" y="{}" fill="black" font-size="{}px"'
+            svg_ops.append('<text x="{}" y="{}" fill="black"'
+                           ' font-size="{}px" font-style="{}"'
                            ' text-anchor="middle"'
-                           ' >{}</text>'.format(xpos+key_w*0.5, ypos+key_h*0.6, key_w*0.4,
+                           ' >{}</text>'.format(
+                               xpos+key_w*0.5, ypos+key_h*0.6,
+                               key_w * 0.4, "normal",
                                ksym2))
 
 def hands_dividing_line(svg_ops):
