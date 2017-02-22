@@ -38,6 +38,8 @@ tab_mul = 1.5
 caps_mul = 1.8
 lshift_mul = 2.4
 
+CausesAnotherLevel = None
+
 def convert(debug, outdir, symname_defs, layouts, partials):
     outldir = os.path.join(outdir, "layouts")
     outpdir = os.path.join(outdir, "partials")
@@ -49,6 +51,8 @@ def convert(debug, outdir, symname_defs, layouts, partials):
             pass
 
     for lt in layouts:
+        global CausesAnotherLevel
+        CausesAnotherLevel = {}
         for base_lv in [1, 3, 5]:
             svg_ops = []
             hands_dividing_line(svg_ops)
@@ -59,7 +63,7 @@ def convert(debug, outdir, symname_defs, layouts, partials):
                     kcode, ksyms = args
                     ksym1 = str(ksyms[base_lv-1])
                     ksym2 = str(ksyms[base_lv])
-                    output_key(svg_ops, kcode, ksym1, ksym2, symname_defs, lt, debug)
+                    output_key(svg_ops, kcode, ksym1, ksym2, symname_defs, lt, debug, base_lv)
 
             svg_filename = lt.name
             if base_lv != 1:
@@ -81,7 +85,19 @@ def convert(debug, outdir, symname_defs, layouts, partials):
 
 U_hexdigit = re.compile("U[0-9a-fA-F]+$")
 
-def output_key(svg_ops, keycode, keysym1, keysym2, symname_defs, lt, debug):
+def note_if_causes_another_level(keycode, keysym):
+    global CausesAnotherLevel
+    if keysym in ["ISO_Level3_Shift", "ISO_Level3_Latch"]:
+        CausesAnotherLevel[str(keycode)] = 3
+    if keysym in ["ISO_Level5_Shift", "ISO_Level5_Latch"]:
+        CausesAnotherLevel[str(keycode)] = 5
+
+def causes_this_level(keycode, level):
+    if str(keycode) in CausesAnotherLevel:
+        if CausesAnotherLevel[str(keycode)] == level:
+            return True
+
+def output_key(svg_ops, keycode, keysym1, keysym2, symname_defs, lt, debug, base_lv):
     if debug:
         print(["svg: lkey", lt.name, keycode, keysym1, keysym2])
 
@@ -105,9 +121,16 @@ def output_key(svg_ops, keycode, keysym1, keysym2, symname_defs, lt, debug):
             xpos = int(key_w * tilde_mul + (key_b + key_w) * (column-1) + key_b * 2)
             ypos = int(key_b)
 
+        note_if_causes_another_level(keycode, keysym1)
+        if causes_this_level(keycode, base_lv):
+            fill_color = "grey"
+        else:
+            fill_color = "white"
+
         svg_ops.append('<rect x="{}" y="{}" width="{}" height="{}"'
-                       ' rx="{}" ry="{}" fill="white" stroke="black" stroke-width="{}"'
-                       ' />'.format(xpos, ypos, key_w, key_h, key_w*0.1, key_h*0.1, key_w*0.01))
+                       ' rx="{}" ry="{}" fill="{}" stroke="black" stroke-width="{}"'
+                       ' />'.format(xpos, ypos, key_w, key_h, key_w*0.1, key_h*0.1,
+                                    fill_color, key_w*0.01))
 
         def to_utf_char(s):
             code = None
