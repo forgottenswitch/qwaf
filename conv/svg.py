@@ -58,6 +58,8 @@ def convert(debug, outdir, symname_defs, layouts, partials):
                             svg_ops="\n".join(svg_ops)
                             ))
 
+U_hexdigit = re.compile("U[0-9a-fA-F]+$")
+
 def output_key(svg_ops, keycode, keysym1, keysym2, symname_defs, lt, debug):
     if debug:
         print(["svg: lkey", lt.name, keycode, keysym1, keysym2])
@@ -93,7 +95,7 @@ def output_key(svg_ops, keycode, keysym1, keysym2, symname_defs, lt, debug):
             if s in special_ksyms:
                 return special_ksyms[s]
             if s not in symname_defs:
-                if s.startswith("U"):
+                if re.match(U_hexdigit, s):
                     code = int(s[1:], base=16)
             else:
                 code = symname_defs.get(s)

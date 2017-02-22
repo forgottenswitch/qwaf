@@ -45,9 +45,5 @@ Note: to see Compose combinations, run `dumpkeys | grep --binary-files=text ^com
 
 Notes on XKB
 ------------
-Shift-selection with keys accessible through `;` does not work in MonoDevelop and Java apps.
-The workaround is active by default, but has problems under Xserver 1.18.1 - 1.18.4.
-To disable it in custom `.xkb` file, add `hjkl(lv5)` to `xkb_symbols`.
-
 As the `xkbcomp` cannot distinguish between system and non-system includes,
 all generated xkb files under have nonstandard names.

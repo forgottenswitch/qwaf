@@ -85,26 +85,6 @@ Digits = {
 
 Unicode_re = re.compile(r"U[0-9a-fA-F]{1,4}$")
 
-Redirs = {
-        # This should be kept in sync with "redirs" from ./hjkl
-        "ISO_Fast_Cursor_Left": "Left",
-        "ISO_Fast_Cursor_Down": "Down",
-        "ISO_Fast_Cursor_Up": "Up",
-        "ISO_Fast_Cursor_Right": "Right",
-        #
-        "ISO_Partial_Line_Down": "Next",
-        "ISO_Partial_Line_Up": "Prior",
-        "ISO_Partial_Space_Left": "Home",
-        "ISO_Partial_Space_Right": "End",
-        #
-        "ISO_Set_Margin_Left": "BackSpace",
-        "ISO_Set_Margin_Right": "Delete",
-        #
-        "ISO_Release_Margin_Left": "Return",
-        "ISO_Release_Margin_Right": "Insert",
-        "ISO_Release_Both_Margins": "Escape",
-}
-
 UnknownSymnames = [
         "horizconnector", "schwa", "SCHWA",
         "leftdoublequotemark", "rightdoublequotemark",
@@ -259,8 +239,7 @@ def one_layout(kl, kl_qwerty, dest_fobj, dual, keycodes_defined):
                 if not modifier: key_def_lines.append("#")
                 key_def_lines.append("# {} <{}>".format(mod_capit, keycode));
                 if not modifier:
-                    keysyms1 = [ Redirs.get(x) or x for x in keysyms ]
-                    key_def_lines.append("# " + str(keysyms1))
+                    key_def_lines.append("# " + str(keysyms))
                 if not modifier: key_def_lines.append("#")
 
                 linux_kcode = 0
@@ -295,8 +274,6 @@ def one_layout(kl, kl_qwerty, dest_fobj, dual, keycodes_defined):
                         ksym = Digits[ksym]
                     elif dual and ksym in GroupTranslations:
                         ksym = GroupTranslations[ksym]
-                    elif ksym in Redirs:
-                        ksym = Redirs[ksym]
                     elif ksym and re.match(Unicode_re, ksym):
                         ksym_code_hex = ksym[1:]
                         ksym_code = int(ksym_code_hex, base=16)
@@ -319,9 +296,7 @@ def one_layout(kl, kl_qwerty, dest_fobj, dual, keycodes_defined):
                             print(SymnameDefs)
                             raise e
                         ksym = "U+" + int_to_base(ksym_utf, 16).zfill(4)
-
-                    # not elif because of Redirs
-                    if ksym in ["Next", "Prior"] and (lv % 2) == 0:
+                    elif ksym in ["Next", "Prior"] and (lv % 2) == 0:
                         if ksym == "Next":  ksym = "Decr_Console"
                         if ksym == "Prior": ksym = "Incr_Console"
 
