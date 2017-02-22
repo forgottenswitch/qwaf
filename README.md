@@ -7,6 +7,18 @@ Works in X11 and Linux console.
 The `hjkl` "module" makes `,` a prefix, `;` a modifier,
 `,m` a layout switcher, and `,n` a Compose key.
 
+  <img src="pic/qwaf.png" alt="Qwaf lv1" width="800" />
+
+AltGr level, accesible with Comma:
+  <img src="pic/qwaf-lv3.png" alt="Qwaf lv3" width="800" />
+
+Second AltGr level, accessible with Semicolon:
+  <img src="pic/qwaf-lv5.png" alt="Qwaf lv5" width="800" />
+
+Cyrillic variant:
+  <img src="pic/ru_intl.png" alt="Cyrillic lv1" width="800" />
+  <img src="pic/ru_intl-lv3.png" alt="Cyrillic lv3" width="800" />
+
 International/Dvorak/etc. variants almost aren't tested.
 
 Building

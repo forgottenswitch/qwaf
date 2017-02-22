@@ -2,3 +2,5 @@ Non- xkb/xkeyboard-config -standard filenames are so that
 `xkbcomp` would not see them as system ones
 (it only has #include"", but not #include<>).
 
+To regenerate README images, run "make pic".
+This will need ImageMagick installed (for its "convert" program).

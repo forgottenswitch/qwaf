@@ -159,7 +159,7 @@ def output_key(svg_ops, keycode, keysym1, keysym2, symname_defs, lt, debug, base
         class label:
             def __init__(self, ksym, ypos_offset):
                 self.font_size = key_w * 0.4
-                self.font_style = "normal"
+                self.font_style = "bold"
                 self.ksym = ksym
                 self.xpos = xpos + key_w*0.3
                 self.ypos = ypos + key_h*(0.35 + ypos_offset)
@@ -191,7 +191,7 @@ def output_key(svg_ops, keycode, keysym1, keysym2, symname_defs, lt, debug, base
                            ' text-anchor="middle"'
                            ' >{}</text>'.format(
                                xpos+key_w*0.5, ypos+key_h*0.6,
-                               key_w * 0.4, "normal",
+                               key_w * 0.5, "bold",
                                ksym2))
 
 def hands_dividing_line(svg_ops):
