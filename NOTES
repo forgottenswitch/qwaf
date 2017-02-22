@@ -1,0 +1,4 @@
+Non- xkb/xkeyboard-config -standard filenames are so that
+`xkbcomp` would not see them as system ones
+(it only has #include"", but not #include<>).
+

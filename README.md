@@ -42,8 +42,3 @@ make
 sudo loadkeys gen/linux_console/qwaf_us.map
 ```
 Note: to see Compose combinations, run `dumpkeys | grep --binary-files=text ^compose`
-
-Notes on XKB
-------------
-As the `xkbcomp` cannot distinguish between system and non-system includes,
-all generated xkb files under have nonstandard names.
