@@ -69,12 +69,13 @@ def convert(debug, outdir, symname_defs, layouts, partials):
                 print("'{}({})' into '{}'".format(lt.filename, lt.name, svg_name))
 
             with open(svg_name, "w") as f:
+                rows, cols = 4, 14
                 f.write('<svg xmlns="http://www.w3.org/2000/svg" version="1.1">\n'
                         '    <rect x="0" y="0" width="{kbd_w}" height="{kbd_h}" fill="white" />\n'
                         '{svg_ops}\n'
                         '</svg>'.format(
-                            kbd_w=(key_w*15+key_b*16),
-                            kbd_h=(key_h*5+key_b*6),
+                            kbd_w=(key_w*cols+key_b*(cols+1)),
+                            kbd_h=(key_h*rows+key_b*(rows+1)),
                             svg_ops="\n".join(svg_ops)
                             ))
 
