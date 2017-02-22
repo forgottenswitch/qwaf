@@ -5,8 +5,28 @@ import sys
 name = "svg"
 
 special_ksyms = {
-    "ISO_Level5_Shift": "Lv5",
-    "ISO_Level3_Latch": "Lv3",
+    "ISO_Level5_Lock": "⇪5",
+    "ISO_Level5_Shift": "⇧5",
+    "ISO_Level3_Latch": "⇧⇧3",
+    "ISO_Level2_Latch": "⇧⇧",
+    "ISO_Next_Group": "↓⌨",
+    "ISO_Prev_Group": "↑⌨",
+    "Tab": "↹", "ISO_Left_Tab": "↹",
+    "Left": "←", "Up": "↑",
+    "Down": "↓", "Right": "→",
+    "XF86Undo": "↶", "XF86Redo": "↷",
+    "XF86Back": "⇽", "XF86Forward": "⇾",
+    "Home": "⇇",
+    "Page_Up": "⇈",
+    "End": "⇉",
+    "Page_Down": "⇊",
+    "Return": "↵",
+    "Escape": "Esc",
+    "BackSpace": "⌫",
+    "Delete": "⌦",
+    "Menu": "▤",
+    "Multi_key": "+⌨",
+    "None": "",
 }
 
 key_w = 100
