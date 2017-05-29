@@ -31,8 +31,8 @@ Translations = {
 
         "Backspace": "BackSpace",
         "Delete": "Remove",
-        "Next": "PageDown",
-        "Prior": "PageUp",
+        "Page_Down": "PageDown",
+        "Page_Up": "PageUp",
 
         "Multi_key": "Compose",
         "Menu": "Last_Console",
