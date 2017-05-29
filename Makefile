@@ -6,7 +6,7 @@ DOWNLOADS_DIR = fetch
 all: $(OUTDIR)
 
 $(OUTDIR): conv.py add  hjkl layouts letters_lat letters_cyr \
-	$(DOWNLOADS_DIR)/keysymdef.h clean
+	$(DOWNLOADS_DIR)/keysymdef.h clean_except_for_pic
 	 python3 -B conv.py $(CONV_FLAGS) -o $@ layouts
 
 g: CONV_FLAGS += -g
@@ -19,6 +19,10 @@ $(DOWNLOADS_DIR)/keysymdef.h:
 .PHONY: clean
 clean:
 	@rm -r $(OUTDIR) pic 2>/dev/null || true
+
+.PHONY: clean_except_for_pic
+clean_except_for_pic:
+	@rm -r $(OUTDIR) 2>/dev/null || true
 
 .PHONY: pic
 pic: $(OUTDIR)
