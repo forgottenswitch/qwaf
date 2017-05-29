@@ -35,7 +35,7 @@ Translations = {
         "Prior": "PageUp",
 
         "Multi_key": "Compose",
-        "Menu": "nul",
+        "Menu": "Last_Console",
         "ISO_Left_Tab": "Meta_Tab",
         "Print": "nul",
         "XF86Back": "nul",
