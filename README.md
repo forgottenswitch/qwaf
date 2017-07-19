@@ -1,7 +1,7 @@
 QWAF
 ====
 
-Latin/Cyrillic keyboard layout trying to be similar to Qwerty.
+Keyboard layout trying to be similar to Qwerty.
 Works in X11 and Linux console.
 
 The `hjkl` "module" makes `,` a prefix, `;` a modifier,
