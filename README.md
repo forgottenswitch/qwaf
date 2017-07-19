@@ -29,6 +29,11 @@ make
 ```
 It will download X11 files into `fetch/`, and generate layouts into `gen/`.
 
+Bugs
+----
+The `,` and `;` modifiers sometimes lock. To recover, press them and `Shift` in
+random combinations.
+
 Running in X11 (i.e. XKB)
 -------------------------
 ```sh
@@ -37,6 +42,8 @@ make
 ./examples/run_example.sh 1
 ```
 (Ignore the error and lots of warnings it would give).
+
+If `;` does not become a modifier, perform a VT switch (e.g. via `Ctrl-Alt-F[1-9]`).
 
 Or assemble an `.xkb` file (like `examples/qwaf_hjkl.xkb`), and run:
 ```sh
