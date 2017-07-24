@@ -14,6 +14,13 @@ Control_capable_keys = [
         "bracketleft", "bracketright", # Control_bracketleft => Escape
 ]
 
+Control_or_ControlAlt_special_case_keys = {
+        "BackSpace": "Meta_BackSpace", # Control_backspace => Ctrl-Meta-h => delete word backward
+        "Delete": "Meta_d", # Control_delete => Meta-d => delete word forward
+        "Left": "Meta_b", # Control_left => Meta-b => go word backward
+        "Right": "Meta_f", # Control_right => Meta-f => go word forward
+}
+
 Meta_capable_keys = [
         "grave",
         "one", "two", "three", "four", "five",
@@ -314,6 +321,8 @@ def one_layout(kl, kl_qwerty, dest_fobj, dual, keycodes_defined):
                             elif (modifier == "control") and (ksym in Control_capable_keys):
                                 if ksym == "bracketleft": ksym = "Escape"
                                 else: ksym = "Control_{}".format(ksym)
+                            elif (modifier in ["control", "control alt"]) and (ksym in Control_or_ControlAlt_special_case_keys):
+                                ksym = Control_or_ControlAlt_special_case_keys[ksym]
                             elif (modifier == "alt") and (ksym in Meta_capable_keys):
                                 ksym = "Meta_{}".format(ksym)
                             else:
