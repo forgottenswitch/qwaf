@@ -69,7 +69,7 @@ fi
 
 temp_xkb=$(mktemp)
 cp "${thisdir}/qwaf_hjkl.xkb" "$temp_xkb"
-sed -i -e "s/hjkl(qwaf)+ctrl(nocaps)/$nth_src/" "$temp_xkb"
+sed -i -e "s/qwaf(qwaf)+ctrl(nocaps)/$nth_src/" "$temp_xkb"
 
 echo_and_run() {
   echo "$@"
