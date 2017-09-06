@@ -7,7 +7,7 @@ symbols "semic_shift"
 symbols "semic_lock"
   level 1
   keytype "SIX_LEVEL"
-  key AC10: ISO_Level5_Shift, ISO_Level5_Shift, ISO_Level5_Shift, ISO_Level5_Shift, ISO_Level5_Shift, ISO_Level5_Shift
+  key AC10: ISO_Level5_Lock, ISO_Level5_Lock, ISO_Level5_Lock, ISO_Level5_Lock, ISO_Level5_Lock, ISO_Level5_Lock
   include "level5(modifier_mapping)"
 
 symbols "caps_shift"
