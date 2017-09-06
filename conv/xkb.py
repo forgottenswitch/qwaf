@@ -94,8 +94,8 @@ xkb_symbols "{}" {{
         dest.add_file("letters_lat", "symbols/qwaf_lat")
         dest.add_file("letters_cyr", "symbols/qwaf_cyr")
         dest.add_file("hjkl", "symbols/hjkl")
-        dest.add_file("level3_hjkl", "symbols/level3_hjkl")
-        dest.add_file("level5_hjkl", "symbols/level5_hjkl")
+        dest.add_file("level3_switch", "symbols/level3_switch")
+        dest.add_file("level5_switch", "symbols/level5_switch")
 
         for k in partials:
             k_base_filename = os.path.basename(k.filename)

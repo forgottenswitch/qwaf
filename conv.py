@@ -362,8 +362,8 @@ def read_file(filename, as_partials=False, referring_files=[]):
                 syntax_error("unknown directive '{}'".format(tok))
 
 read_file("layouts")
-read_file("level3_hjkl", as_partials=True)
-read_file("level5_hjkl", as_partials=True)
+read_file("level3_switch", as_partials=True)
+read_file("level5_switch", as_partials=True)
 
 for x in layouts:
     x.compile()

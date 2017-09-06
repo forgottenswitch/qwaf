@@ -2,15 +2,15 @@
 
 symbols "shift"
   include "hjkl(lv_1_3_5)"
-  include "level3_hjkl(comma_latch)"
-  include "level5_hjkl(semic_shift)"
-  include "level5_hjkl(ralt_lock)"
+  include "level3_switch(comma_latch)"
+  include "level5_switch(semic_shift)"
+  include "level5_switch(ralt_lock)"
 
 symbols "lock"
   include "hjkl(lv_1_3_5)"
-  include "level3_hjkl(comma_latch)"
-  include "level5_hjkl(semic_lock)"
-  include "level5_hjkl(ralt_lock)"
+  include "level3_switch(comma_latch)"
+  include "level5_switch(semic_lock)"
+  include "level5_switch(ralt_lock)"
 
 symbols "lv_1_3_5"
   include "hjkl(lv1)"

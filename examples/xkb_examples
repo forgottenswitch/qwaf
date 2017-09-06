@@ -6,11 +6,11 @@ qwaf(qwerty)+ctrl(nocaps)
 
 // QWAF with HJKL
 // ";" locks, Space unlocks
-qwaf(qwaf)+ctrl(nocaps)+level5_hjkl(semic_lock)+level5_hjkl(space_unlock)
+qwaf(qwaf)+ctrl(nocaps)+level5_switch(semic_lock)+level5_switch(space_unlock)
 
 // QWAF with HJKL
 // ";" locks and unlocks
-qwaf(qwaf)+ctrl(nocaps)+level5_hjkl(semic_lock)+level5_hjkl(space_unlock)
+qwaf(qwaf)+ctrl(nocaps)+level5_switch(semic_lock)+level5_switch(space_unlock)
 
 // Deutch (qwertz) QWAF
 qwaf(de)+ctrl(nocaps)
