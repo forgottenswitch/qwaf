@@ -10,7 +10,7 @@ qwaf_layouts(qwaf)+ctrl(nocaps)+qwaf_level5_switch(semic_lock)+qwaf_level5_switc
 
 // QWAF with HJKL
 // ";" locks and unlocks
-qwaf_layouts(qwaf)+ctrl(nocaps)+qwaf_level5_switch(semic_lock)+qwaf_level5_switch(space_unlock)
+qwaf_layouts(qwaf)+ctrl(nocaps)+qwaf_level5_switch(semic_lock)
 
 // Deutch (qwertz) QWAF
 qwaf_layouts(de)+ctrl(nocaps)
