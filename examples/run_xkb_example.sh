@@ -67,20 +67,49 @@ if test -z "$nth_src" ; then
   exit 1
 fi
 
-temp_xkb=$(mktemp)
-cp "${thisdir}/qwaf_hjkl.xkb" "$temp_xkb"
-sed -i -e "s/qwaf_layouts(qwaf)+ctrl(nocaps)/$nth_src/" "$temp_xkb"
+temp_xkb_src="$(mktemp)"
+temp_xkb_out="$(mktemp)"
+cp "${thisdir}/qwaf_hjkl.xkb" "$temp_xkb_src"
+sed -i -e "s/qwaf_layouts(qwaf)+ctrl(nocaps)/$nth_src/" "$temp_xkb_src"
 
 echo_and_run() {
   echo "$@"
   "$@"
 }
 
+silent_ok() {
+  "$@" 2>/dev/null || true
+}
+
+run_xkbcomp() {
+  if test "$((COMPILE_ONLY))" -eq 0 ; then
+    echo_and_run xkbcomp "$@" "$DISPLAY"
+  else
+    echo_and_run xkbcomp "$@" -xkb -o "$temp_xkb_out"
+  fi
+
+  xkb_out="$( silent_ok cat "$temp_xkb_out" )"
+
+  # xkbcomp exits 0 even when failing to compile;
+  # so examine the output file to check whether the
+  # compilation was successfull
+  if test -z "$xkb_out" ; then
+    return 1
+  fi
+  return 0
+}
+
 echo
-echo "$temp_xkb:"
+echo "$temp_xkb_src:"
 echo "---"
-cat "$temp_xkb"
+cat "$temp_xkb_src"
 echo "---"
 echo
-echo_and_run xkbcomp "-I${this_updir}/gen/xkb" "$temp_xkb" $DISPLAY
-rm "$temp_xkb"
+
+run_xkbcomp "-I${this_updir}/gen/xkb" "$temp_xkb_src"
+xkbcomp_status="$?"
+
+silent_ok rm "$temp_xkb_src"
+silent_ok rm "$temp_xkb_out"
+
+exit "$xkbcomp_status"

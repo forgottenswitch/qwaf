@@ -36,3 +36,7 @@ pic: $(OUTDIR)
 .PHONY: homeinstall
 homeinstall: $(OUTDIR)
 	bash utils/installer.sh $(OUTDIR) ./rules
+
+.PHONY: test
+test: $(OUTDIR)
+	sh utils/xkb_tester.sh
