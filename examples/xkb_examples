@@ -33,16 +33,16 @@ qwaf(qwaf)+ctrl(nocaps)+qwaf_cyr(qwaf_intl):2+hjkl:2+ctrl(nocaps):2
 qwaf(qwaf)+ctrl(nocaps)+qwaf_cyr(qwaf_srp):2+hjkl:2+ctrl(nocaps):2
 
 // Dvorak HJKL
-qwaf(dvorak)+hjkl+ctrl(nocaps)
+qwaf(qwerty)+qwaf_lat(dvorak)+hjkl+ctrl(nocaps)
 
 // Colemak HJKL
-qwaf(colemak)+hjkl+ctrl(nocaps)
+qwaf(qwerty)+qwaf_lat(colemak)+hjkl+ctrl(nocaps)
 
 // Workman HJKL
-qwaf(workman)+hjkl+ctrl(nocaps)
+qwaf(qwerty)+qwaf_lat(workman)+hjkl+ctrl(nocaps)
 
 // Dvorak Russian HJKL
 // ",m" to change layouts
 // Not tested much.
-qwaf(qwaf)+ctrl(nocaps)+qwaf_cyr(dvorak):2+hjkl:2+ctrl(nocaps):2
+qwaf(qwaf)+ctrl(nocaps)+qwaf_cyr(qwaf):2+qwaf_cyr(dvorak):2+hjkl:2+ctrl(nocaps):2
 
