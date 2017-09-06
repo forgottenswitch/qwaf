@@ -20,17 +20,17 @@ qwaf(fr)+ctrl(nocaps)
 
 // Russian QWAF
 // ",m" to change layouts
-qwaf(qwaf)+ctrl(nocaps)+qwaf_cyr(qwaf):2+ctrl(nocaps):2
+qwaf(qwaf)+ctrl(nocaps)+qwaf_cyr(qwaf):2+hjkl:2+ctrl(nocaps):2
 
 // International Cyrillic QWAF
 // ",m" to change layouts
 // Prototypical only, not tested.
-qwaf(qwaf)+ctrl(nocaps)+qwaf_cyr(qwaf_intl):2+ctrl(nocaps):2
+qwaf(qwaf)+ctrl(nocaps)+qwaf_cyr(qwaf_intl):2+hjkl:2+ctrl(nocaps):2
 
 // Serbian Cyrillic QWAF
 // ",m" to change layouts
 // Prototypical only, not tested.
-qwaf(qwaf)+ctrl(nocaps)+qwaf_cyr(qwaf_srp):2+ctrl(nocaps):2
+qwaf(qwaf)+ctrl(nocaps)+qwaf_cyr(qwaf_srp):2+hjkl:2+ctrl(nocaps):2
 
 // Dvorak HJKL
 qwaf(dvorak)+hjkl+ctrl(nocaps)
@@ -44,5 +44,5 @@ qwaf(workman)+hjkl+ctrl(nocaps)
 // Dvorak Russian HJKL
 // ",m" to change layouts
 // Not tested much.
-qwaf(qwaf)+ctrl(nocaps)+qwaf_cyr(dvorak):2+ctrl(nocaps):2
+qwaf(qwaf)+ctrl(nocaps)+qwaf_cyr(dvorak):2+hjkl:2+ctrl(nocaps):2
 
