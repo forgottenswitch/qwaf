@@ -1,7 +1,7 @@
 xkb_keymap {
     xkb_keycodes  { include "evdev" };
-    xkb_types     { include "complete+level6" };
-    xkb_compat    { include "complete+hjkl" };
+    xkb_types     { include "complete+qwaf_level6" };
+    xkb_compat    { include "complete+qwaf_hjkl" };
     xkb_symbols   { include "pc+inet(evdev)+qwaf(qwaf)+ctrl(nocaps)" };
     xkb_geometry  { include "pc(pc104)" };
 };

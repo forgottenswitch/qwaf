@@ -1,7 +1,7 @@
 default partial xkb_compatibility "default" {
-    include "hjkl(hjkl_iso)"
-    include "hjkl(lv2_latch)"
-    include "hjkl(shift_lock)"
+    include "qwaf_hjkl(hjkl_iso)"
+    include "qwaf_hjkl(lv2_latch)"
+    include "qwaf_hjkl(shift_lock)"
 };
 
 partial xkb_compatibility "hjkl_iso" {
