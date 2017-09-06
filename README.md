@@ -2,7 +2,7 @@ QWAF
 ====
 
 Keyboard layout trying to be similar to Qwerty.
-Works in X11 and Linux console.
+Works in X11, Wayland, Linux console.
 
 The `hjkl` "module" makes `,` a prefix, `;` a modifier,
 `,m` a layout switcher, and `,n` a Compose key.
@@ -61,3 +61,32 @@ make
 sudo loadkeys gen/linux_console/qwaf_us.map
 ```
 Note: to see Compose combinations, run `dumpkeys | grep --binary-files=text ^compose`
+
+Running under Weston
+--------------------
+- Symlink the generated files into `~/.xkb` with `make homeinstall`.
+- Put into `~/.config/weston.ini`:
+```
+[keyboard]
+keymap_rules=evdev_qwaf
+keymap_layout=qwaf_layouts
+keymap_variant=qwaf
+```
+  The `keymap_variant` corresponds to 'symbols' in the `layouts` source file.
+  That is, `grep symbols layouts` gives list of possible values.
+- Run `weston-launch` at VT console; quit by pressing `Ctrl-Alt-Backspace`
+
+Other Wayland compositors probably require similar tweaks to their config files.
+
+It is possible to use CapsLock or Right Alt as a locking `;` modifier.
+For this, put an `option` value from `rules` file into `keymap_options`, such as:
+```
+[keyboard]
+...
+keymap_options=level5_caps_lock
+```
+
+Otherwise, CapsLock-as-a-Control is recommended:
+```
+keymap_options=ctrl:nocaps
+```

@@ -1,0 +1,19 @@
+// xkb rules for qwaf layout and its variants
+//
+
+! layout              =         compat
+  *                   = +qwaf_hjkl
+! layout[1]           =         compat
+  *                   = +qwaf_hjkl
+
+! layout              =         types
+  *                   = +qwaf_level6
+! layout[1]           =         types
+  *                   = +qwaf_level6
+
+// HJKL togglers
+! option                          =                            symbols
+  level5_semic_lock               = +qwaf_level5_switch(semic_lock)
+  level5_semic_lock_space_unlock  = +qwaf_level5_switch(semic_lock)+qwaf_level5_switch(space_unlock)
+  level5_caps_lock                = +qwaf_level5_switch(caps_lock)
+  level5_ralt_lock                = +qwaf_level5_switch(ralt_lock)

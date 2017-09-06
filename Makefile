@@ -32,3 +32,7 @@ pic: $(OUTDIR)
 	convert gen/svg/layouts/qwaf-lv5.svg      pic/qwaf-lv5.png
 	convert gen/svg/layouts/ru_intl.svg       pic/ru_intl.png
 	convert gen/svg/layouts/ru_intl-lv3.svg   pic/ru_intl-lv3.png
+
+.PHONY: homeinstall
+homeinstall: $(OUTDIR)
+	bash utils/installer.sh $(OUTDIR) ./rules
