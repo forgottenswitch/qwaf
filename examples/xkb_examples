@@ -1,48 +1,48 @@
 // QWAF with HJKL
-qwaf(qwaf)+ctrl(nocaps)
+qwaf_layouts(qwaf)+ctrl(nocaps)
 
 // QWERTY with HJKL
-qwaf(qwerty)+ctrl(nocaps)
+qwaf_layouts(qwerty)+ctrl(nocaps)
 
 // QWAF with HJKL
 // ";" locks, Space unlocks
-qwaf(qwaf)+ctrl(nocaps)+level5_switch(semic_lock)+level5_switch(space_unlock)
+qwaf_layouts(qwaf)+ctrl(nocaps)+qwaf_level5_switch(semic_lock)+qwaf_level5_switch(space_unlock)
 
 // QWAF with HJKL
 // ";" locks and unlocks
-qwaf(qwaf)+ctrl(nocaps)+level5_switch(semic_lock)+level5_switch(space_unlock)
+qwaf_layouts(qwaf)+ctrl(nocaps)+qwaf_level5_switch(semic_lock)+qwaf_level5_switch(space_unlock)
 
 // Deutch (qwertz) QWAF
-qwaf(de)+ctrl(nocaps)
+qwaf_layouts(de)+ctrl(nocaps)
 
 // French (azerty-like) QWAF
-qwaf(fr)+ctrl(nocaps)
+qwaf_layouts(fr)+ctrl(nocaps)
 
 // Russian QWAF
 // ",m" to change layouts
-qwaf(qwaf)+ctrl(nocaps)+qwaf_cyr(qwaf):2+hjkl:2+ctrl(nocaps):2
+qwaf_layouts(qwaf)+ctrl(nocaps)+qwaf_letters_cyr(qwaf):2+qwaf_hjkl:2+ctrl(nocaps):2
 
 // International Cyrillic QWAF
 // ",m" to change layouts
 // Prototypical only, not tested.
-qwaf(qwaf)+ctrl(nocaps)+qwaf_cyr(qwaf_intl):2+hjkl:2+ctrl(nocaps):2
+qwaf_layouts(qwaf)+ctrl(nocaps)+qwaf_letters_cyr(qwaf_intl):2+qwaf_hjkl:2+ctrl(nocaps):2
 
 // Serbian Cyrillic QWAF
 // ",m" to change layouts
 // Prototypical only, not tested.
-qwaf(qwaf)+ctrl(nocaps)+qwaf_cyr(qwaf_srp):2+hjkl:2+ctrl(nocaps):2
+qwaf_layouts(qwaf)+ctrl(nocaps)+qwaf_letters_cyr(qwaf_srp):2+qwaf_hjkl:2+ctrl(nocaps):2
 
 // Dvorak HJKL
-qwaf(qwerty)+qwaf_lat(dvorak)+hjkl+ctrl(nocaps)
+qwaf_layouts(qwerty)+qwaf_letters_lat(dvorak)+qwaf_hjkl+ctrl(nocaps)
 
 // Colemak HJKL
-qwaf(qwerty)+qwaf_lat(colemak)+hjkl+ctrl(nocaps)
+qwaf_layouts(qwerty)+qwaf_letters_lat(colemak)+qwaf_hjkl+ctrl(nocaps)
 
 // Workman HJKL
-qwaf(qwerty)+qwaf_lat(workman)+hjkl+ctrl(nocaps)
+qwaf_layouts(qwerty)+qwaf_letters_lat(workman)+qwaf_hjkl+ctrl(nocaps)
 
 // Dvorak Russian HJKL
 // ",m" to change layouts
 // Not tested much.
-qwaf(qwaf)+ctrl(nocaps)+qwaf_cyr(qwaf):2+qwaf_cyr(dvorak):2+hjkl:2+ctrl(nocaps):2
+qwaf_layouts(qwaf)+ctrl(nocaps)+qwaf_letters_cyr(qwaf):2+qwaf_letters_cyr(dvorak):2+qwaf_hjkl:2+ctrl(nocaps):2
 

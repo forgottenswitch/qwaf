@@ -4,7 +4,12 @@ import re
 name = "xkb"
 
 def filter_include(inc):
-    inc = re.sub(r"^(letters|layouts)", "qwaf", inc)
+    if inc.startswith("letters_") or \
+            inc.startswith("layouts") or \
+            inc.startswith("level3_") or \
+            inc.startswith("level5_") or \
+            inc.startswith("hjkl"):
+        inc = "qwaf_" + inc
     return inc
 
 def collect_includes(includes):
@@ -73,7 +78,7 @@ def convert(debug, outdir, symname_defs, layouts, partials):
 
     # Output layout files (they only include partial files)
     #
-    filename_layouts = os.path.join(outdir, "symbols", "qwaf")
+    filename_layouts = os.path.join(outdir, "symbols", "qwaf_layouts")
     with open(filename_layouts, "w") as f:
         for k in layouts:
             includes = collect_includes(k.includes)
@@ -91,11 +96,11 @@ xkb_symbols "{}" {{
     # Output partial files (the actual key assignments)
     #
     with DestinationsForPartials(outdir) as dest:
-        dest.add_file("letters_lat", "symbols/qwaf_lat")
-        dest.add_file("letters_cyr", "symbols/qwaf_cyr")
-        dest.add_file("hjkl", "symbols/hjkl")
-        dest.add_file("level3_switch", "symbols/level3_switch")
-        dest.add_file("level5_switch", "symbols/level5_switch")
+        dest.add_file("letters_lat", "symbols/qwaf_letters_lat")
+        dest.add_file("letters_cyr", "symbols/qwaf_letters_cyr")
+        dest.add_file("hjkl", "symbols/qwaf_hjkl")
+        dest.add_file("level3_switch", "symbols/qwaf_level3_switch")
+        dest.add_file("level5_switch", "symbols/qwaf_level5_switch")
 
         for k in partials:
             k_base_filename = os.path.basename(k.filename)
