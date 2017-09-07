@@ -10,18 +10,6 @@ symbols "semic_lock"
   key AC10: ISO_Level5_Lock, ISO_Level5_Lock, ISO_Level5_Lock, ISO_Level5_Lock, ISO_Level5_Lock, ISO_Level5_Lock
   include "level5(modifier_mapping)"
 
-symbols "caps_shift"
-  level 1
-  keytype "SIX_LEVEL"
-  key CAPS: ISO_Level5_Shift, ISO_Level5_Shift, ISO_Level5_Shift, ISO_Level5_Shift, ISO_Level5_Shift, ISO_Level5_Shift
-  include "level5(modifier_mapping)"
-
-symbols "caps_shift_and_lock"
-  level 1
-  keytype "SIX_LEVEL"
-  key CAPS: ISO_Level5_Shift, ISO_Level5_Shift, ISO_Level5_Lock, ISO_Level5_Lock, ISO_Level5_Lock, ISO_Level5_Shift
-  include "level5(modifier_mapping)"
-
 symbols "caps_lock"
   level 1
   keytype "SIX_LEVEL"
