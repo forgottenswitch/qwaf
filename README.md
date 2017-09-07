@@ -4,22 +4,28 @@ QWAF
 Keyboard layout trying to be similar to Qwerty.
 Works in X11, Wayland, Linux console.
 
-The `hjkl` "module" makes `,` a prefix, `;` a modifier,
-`,m` a layout switcher, and `,n` a Compose key.
-
   <img src="pic/qwaf.png" alt="Qwaf lv1" width="800" />
 
-AltGr level, accesible with Comma:
+Aside from letters rearrangement, `,` is made a prefix, `;` a modifier, `,m` a
+layout switcher, and `,n` a Compose key.
+
+The `,` and `;` modifiers sometimes lock. To recover from such an event, press
+`,`, `;`, and `Shift` in random combinations (this shouldn't take long).
+
+AltGr level, accesible with Comma prefix:
   <img src="pic/qwaf-lv3.png" alt="Qwaf lv3" width="800" />
 
-Second AltGr level, accessible with Semicolon:
+Second AltGr level, accessible with Semicolon shift:
   <img src="pic/qwaf-lv5.png" alt="Qwaf lv5" width="800" />
 
 Cyrillic variant:
   <img src="pic/ru_intl.png" alt="Cyrillic lv1" width="800" />
   <img src="pic/ru_intl-lv3.png" alt="Cyrillic lv3" width="800" />
 
-International/Dvorak/etc. variants almost aren't tested.
+There are also variations resembling Dvorak, Colemak, Workman, Qwertz, and
+Azerty.  They almost aren't tested, though.  Dvorak is heavily modified to make
+space for Semicolon modifier.  Azerty is modified into "Wverty" for ergonomics
+(as in French, `W` is rare, but not `A`).
 
 Building
 --------
@@ -28,11 +34,6 @@ Run:
 make
 ```
 It will download X11 files into `fetch/`, and generate layouts into `gen/`.
-
-Bugs
-----
-The `,` and `;` modifiers sometimes lock. To recover, press them and `Shift` in
-random combinations.
 
 Running in X11 (i.e. XKB)
 -------------------------
