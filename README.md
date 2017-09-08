@@ -22,10 +22,10 @@ Cyrillic variant:
   <img src="pic/ru_intl.png" alt="Cyrillic lv1" width="800" />
   <img src="pic/ru_intl-lv3.png" alt="Cyrillic lv3" width="800" />
 
-There are also variations resembling Dvorak, Colemak, Workman, Qwertz, and
-Azerty.  They almost aren't tested, though.  Dvorak is heavily modified to make
-space for Semicolon modifier.  Azerty is modified into "Wverty" for ergonomics
-(as in French, `W` is rare, but not `A`).
+There are also variations resembling Dvorak, Colemak, and Workman.
+They almost aren't tested, though.
+
+Two other variations are Deutsch (with easier `Z`) and French (with easier `Q`).
 
 Building
 --------
